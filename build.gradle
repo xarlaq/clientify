@@ -1,0 +1,103 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+// "1.0.0+1.21.11" -- the Fabric convention. The part after the + is semver build metadata, so it
+// names the game this jar was built against without taking part in version comparisons. It lands
+// in the jar filename and, through the fabric.mod.json expansion below, in the reported version.
+version = "${project.mod_version}+${project.minecraft_version}"
+group = project.maven_group
+
+repositories {
+	// Mod Menu, for the optional config-button integration.
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/releases'
+		content {
+			includeGroup 'com.terraformersmc'
+		}
+		metadataSources {
+			mavenPom()
+			artifact()
+		}
+	}
+	mavenCentral()
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"clientify" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Mod Menu: two API interfaces at compile time, and a copy in the dev client so the config
+	// button can actually be clicked while testing. Never bundled (that would need `include`), and
+	// declared only as a suggestion in fabric.mod.json — the integration class is loaded through
+	// Mod Menu's own entrypoint, so it is simply never touched when Mod Menu is absent.
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+}
+
+// Checks for the pure logic that has no Minecraft dependency (packing/geometry/parsing).
+// Deliberately uses NO test framework and is NOT wired into `build`, so a release build never
+// needs a network fetch and can never be blocked by these. Run: gradlew verifyLogic
+sourceSets {
+	logicTest {
+		compileClasspath += sourceSets.client.output
+		runtimeClasspath += sourceSets.client.output
+	}
+}
+
+tasks.register('verifyLogic', JavaExec) {
+	group = 'verification'
+	description = 'Runs dependency-free checks on pure logic (no Minecraft, no JUnit).'
+	classpath = sourceSets.logicTest.runtimeClasspath
+	mainClass = 'dev.clientify.logic.LogicChecks'
+	dependsOn tasks.named('logicTestClasses')
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+	// The bundled font and the baked icon atlas are third-party art under MIT/OFL, so their
+	// notices travel with the jar rather than only living in the repo.
+	from("LICENSE-Phosphor-MIT.txt")
+	from("LICENSE-Roboto-OFL.txt")
+	from("LICENSE-Tabler-MIT.txt")
+}

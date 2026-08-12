@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "clientify",
+	"version": "${version}",
+	"name": "Clientify",
+	"description": "Combines the most popular HUD, PvP, and quality-of-life features into a single lightweight mod.",
+	"authors": ["xarlaq"],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/clientify",
+		"sources": "https://github.com/xarlaq/clientify",
+		"issues": "https://github.com/xarlaq/clientify/issues"
+	},
+	"license": "GPL-3.0-only",
+	"icon": "assets/clientify/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.clientify.client.ClientifyClient"
+		],
+		"modmenu": [
+			"dev.clientify.client.compat.ClientifyModMenu"
+		]
+	},
+	"mixins": [
+		{
+			"config": "clientify.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": ">=0.141.5"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}

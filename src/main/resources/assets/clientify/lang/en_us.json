@@ -1,0 +1,11 @@
+{
+	"key.category.clientify.clientify": "Clientify",
+	"key.clientify.menu": "Open Clientify Menu",
+	"key.clientify.fullbright": "Toggle Fullbright",
+	"key.clientify.lock_tooltip": "Lock Shulker Tooltip (hold)",
+	"key.clientify.zoom": "Zoom",
+	"key.clientify.waypoint": "Add Waypoint (hold to trace)",
+	"key.clientify.waypoint_look": "Add Waypoint (looked-at block)",
+	"key.clientify.waypoint_menu": "Open Waypoint Menu",
+	"key.clientify.totem_reset": "Reset Totem Counts"
+}
