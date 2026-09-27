@@ -11,7 +11,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 /**
  * OptiFine/Zoomify-style hold-to-zoom (C by default): FOV divide via GameRendererMixin,
@@ -48,7 +48,7 @@ public class ZoomModule extends HudModule {
 		super("zoom", "Zoom");
 		instance = this;
 		key = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-				"key.clientify.zoom", GLFW.GLFW_KEY_C, ClientifyClient.KEY_CATEGORY));
+				"key.clientify.zoom", InputConstants.KEY_C, ClientifyClient.KEY_CATEGORY));
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 /**
  * The shared Lunar-style panel chrome: translucent panel over the raw world (no blur, no
@@ -490,7 +490,7 @@ public abstract class PanelScreen extends Screen {
 			}
 			rowHit = true;
 			String name = profiles.get(i);
-			if (e.button() == 1) {
+			if (e.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 				// Right-click arms the row: reset + bin icons appear; click one to confirm.
 				deleteArmed = name.equals(deleteArmed) ? null : name;
 			} else if (name.equals(deleteArmed) && e.x() >= px + SIDEBAR_W - 17) {
@@ -541,7 +541,7 @@ public abstract class PanelScreen extends Screen {
 				endRename();
 				return true;
 			}
-			if (e.key() == GLFW.GLFW_KEY_ENTER || e.key() == GLFW.GLFW_KEY_KP_ENTER) {
+			if (e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_NUMPADENTER) {
 				commitRename();
 				return true;
 			}

@@ -1,5 +1,6 @@
 package dev.clientify.client.gui.widget;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.clientify.client.gui.Textures;
 import dev.clientify.client.gui.Ui;
 import dev.clientify.client.util.Draw;
@@ -39,7 +40,7 @@ public class GlassEditBox extends EditBox {
 
 	@Override
 	public boolean keyPressed(net.minecraft.client.input.KeyEvent e) {
-		if (newlineEscape && isFocused() && e.hasShiftDown() && (e.key() == 257 || e.key() == 335)) {
+		if (newlineEscape && isFocused() && e.hasShiftDown() && (e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_NUMPADENTER)) {
 			insertText("\\n");
 			return true;
 		}

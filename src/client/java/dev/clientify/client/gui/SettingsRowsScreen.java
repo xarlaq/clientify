@@ -1,5 +1,6 @@
 package dev.clientify.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.clientify.client.config.ModuleSettings;
 import dev.clientify.client.gui.widget.GlassEditBox;
 import dev.clientify.client.hud.HudModule.Rect;
@@ -726,11 +727,11 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 				endTyping(false);
 				return true;
 			}
-			if (e.input() == 257 || e.input() == 335) { // return, keypad return
+			if (e.input() == InputConstants.KEY_RETURN || e.input() == InputConstants.KEY_NUMPADENTER) {
 				endTyping(true);
 				return true;
 			}
-			if (e.input() == 259) { // backspace
+			if (e.input() == InputConstants.KEY_BACKSPACE) {
 				typed = typed.isEmpty() ? typed : typed.substring(0, typed.length() - 1);
 				return true;
 			}

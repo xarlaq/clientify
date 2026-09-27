@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ public class ClientifyClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		KEY_CATEGORY = KeyMapping.Category.register(id("clientify"));
 		menuKey = KeyBindingHelper.registerKeyBinding(
-				new KeyMapping("key.clientify.menu", GLFW.GLFW_KEY_RIGHT_SHIFT, KEY_CATEGORY));
+				new KeyMapping("key.clientify.menu", InputConstants.KEY_RSHIFT, KEY_CATEGORY));
 
 		ModuleManager.init();
 		dev.clientify.client.util.WaypointShareHandler.init();

@@ -1,5 +1,6 @@
 package dev.clientify.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.clientify.client.ClientifyClient;
 import dev.clientify.client.config.ClientifyConfig;
 import dev.clientify.client.config.ModuleSettings;
@@ -193,12 +194,12 @@ public class HudEditorScreen extends Screen {
 			return true;
 		}
 		Target t = targetAt(e.x(), e.y());
-		if (t != null && e.button() == 1) {
+		if (t != null && e.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 			// Right-click a module → its settings (backing out lands in the mod list).
 			minecraft.setScreen(t.module().settingsScreen(new ModListScreen(this)));
 			return true;
 		}
-		if (t != null && e.button() == 0) {
+		if (t != null && e.button() == InputConstants.MOUSE_BUTTON_LEFT) {
 			dragging = t.drag();
 			dragModule = t.module();
 			selectedModule = t.module();
