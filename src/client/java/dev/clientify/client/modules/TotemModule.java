@@ -139,7 +139,7 @@ public class TotemModule extends HudModule {
 		float fov = 70f;
 		if (mc.gameRenderer instanceof dev.clientify.mixin.client.GameRendererFovAccessor access) {
 			float partial = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-			fov = access.clientify$getFov(mc.gameRenderer.getMainCamera(), partial, false);
+			fov = access.clientify$getFov(mc.gameRenderer.mainCamera(), partial, false);
 		}
 		return (float) Math.tan(Math.toRadians(fov) / 2d);
 	}
@@ -152,9 +152,9 @@ public class TotemModule extends HudModule {
 	public TotemModule() {
 		super("totem", "Totem Tweaks");
 		instance = this;
-		resetKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyBinding(
+		resetKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(
 				new net.minecraft.client.KeyMapping("key.clientify.totem_reset",
-						org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN,
+						com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(),
 						dev.clientify.client.ClientifyClient.KEY_CATEGORY));
 	}
 

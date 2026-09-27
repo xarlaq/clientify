@@ -465,7 +465,7 @@ public class OverlayModule extends HudModule {
 			return;
 		}
 		appliedFoliage = wanted;
-		mc.levelRenderer.allChanged();
+		mc.levelExtractor.allChanged();
 	}
 
 	/**

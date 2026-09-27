@@ -82,11 +82,11 @@ public class GuiScaleModule extends HudModule {
 			HudElementRegistry.replaceElement(id, original -> (graphics, delta) -> {
 				float scale = hotbarScale();
 				if (scale == 1f) {
-					original.render(graphics, delta);
+					original.extractRenderState(graphics, delta);
 					return;
 				}
 				pushHotbarScale(graphics);
-				original.render(graphics, delta);
+				original.extractRenderState(graphics, delta);
 				graphics.pose().popMatrix();
 			});
 		}

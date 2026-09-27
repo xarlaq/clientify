@@ -12,7 +12,6 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import org.lwjgl.glfw.GLFW;
 
 /** Gamma-override fullbright (LightTextureMixin). Toggle keybind, unbound by default. */
 public class FullbrightModule extends HudModule {
@@ -27,7 +26,7 @@ public class FullbrightModule extends HudModule {
 		super("fullbright", "Fullbright");
 		instance = this;
 		key = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.clientify.fullbright", GLFW.GLFW_KEY_UNKNOWN, ClientifyClient.KEY_CATEGORY));
+				"key.clientify.fullbright", com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), ClientifyClient.KEY_CATEGORY));
 	}
 
 	/** Queried by LightTextureMixin in place of the gamma option. */

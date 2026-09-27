@@ -33,7 +33,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Waypoints, wwaypoints-style. Each waypoint projects to an on-screen chip (item/block
@@ -164,7 +163,7 @@ public class WaypointsModule extends HudModule {
 		key = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.waypoint", InputConstants.KEY_N, ClientifyClient.KEY_CATEGORY));
 		lookKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.clientify.waypoint_look", GLFW.GLFW_KEY_UNKNOWN, ClientifyClient.KEY_CATEGORY));
+				"key.clientify.waypoint_look", InputConstants.UNKNOWN.getValue(), ClientifyClient.KEY_CATEGORY));
 		menuKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.waypoint_menu", InputConstants.KEY_M, ClientifyClient.KEY_CATEGORY));
 	}

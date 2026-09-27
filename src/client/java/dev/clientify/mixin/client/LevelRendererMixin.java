@@ -1,6 +1,6 @@
 package dev.clientify.mixin.client;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import dev.clientify.client.modules.WaypointsModule;
 import net.minecraft.client.Camera;

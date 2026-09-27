@@ -559,7 +559,7 @@ public class AttackIndicatorModule extends HudModule {
 	 * full-size scaled draw is the only way the bar can both fill and follow the scale slider.
 	 */
 	private void renderVanillaStyle(GuiGraphicsExtractor g, Settings s, Rect r,
-			com.mojang.blaze3d.pipeline.RenderPipeline pipeline, float progress, boolean ready,
+			com.mojang.renderpearl.api.pipeline.RenderPipeline pipeline, float progress, boolean ready,
 			boolean inRange) {
 		int x = Math.round(r.x());
 		int y = Math.round(r.y());

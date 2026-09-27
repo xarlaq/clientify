@@ -365,7 +365,7 @@ public final class BlockTextures {
 		NativeImage[] fresh = MipmapGenerator.generateMipLevels(
 				name, new NativeImage[] {mips[0]}, mips.length - 1,
 				net.minecraft.client.renderer.texture.MipmapStrategy.MEAN,
-				access.clientify$alphaCutoffBias());
+				access.clientify$alphaCutoffBias(), mips[0].computeTransparency());
 		if (fresh == null || fresh.length == 0 || fresh[0] != mips[0]) {
 			// Not what this expects; leave the old chain in place rather than leak or free the
 			// image the atlas is about to read.
