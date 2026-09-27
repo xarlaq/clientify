@@ -39,6 +39,6 @@ public final class Menus {
 			back = origin != null ? origin : new TitleScreen();
 		}
 		origin = null;
-		mc.setScreen(back);
+		mc.gui.setScreen(back);
 	}
 }

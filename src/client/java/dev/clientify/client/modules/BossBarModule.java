@@ -10,7 +10,7 @@ import dev.clientify.client.hud.HudText;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -78,7 +78,7 @@ public class BossBarModule extends HudModule {
 	}
 
 	/** Kept for the mixin's call site; boss bars have no chip chrome of their own. */
-	public void drawBackdrop(GuiGraphics g, Minecraft mc) {
+	public void drawBackdrop(GuiGraphicsExtractor g, Minecraft mc) {
 	}
 
 	@Override
@@ -150,10 +150,10 @@ public class BossBarModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
-		if (mc.screen instanceof HudEditorScreen && s.editorPreview) {
+		if (mc.gui.screen() instanceof HudEditorScreen && s.editorPreview) {
 			// A real-looking bar so it can be placed without a boss present. The offsets match
 			// BossHealthOverlayMixin so the template sits where the real bar will.
 			Rect r = bounds(mc, g.guiWidth(), g.guiHeight());

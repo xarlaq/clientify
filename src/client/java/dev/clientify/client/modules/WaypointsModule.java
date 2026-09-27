@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gizmos.GizmoStyle;
@@ -161,11 +161,11 @@ public class WaypointsModule extends HudModule {
 	public WaypointsModule() {
 		super("waypoints", "Waypoints");
 		instance = this;
-		key = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		key = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.waypoint", InputConstants.KEY_N, ClientifyClient.KEY_CATEGORY));
-		lookKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		lookKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.waypoint_look", GLFW.GLFW_KEY_UNKNOWN, ClientifyClient.KEY_CATEGORY));
-		menuKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		menuKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.waypoint_menu", InputConstants.KEY_M, ClientifyClient.KEY_CATEGORY));
 	}
 
@@ -405,7 +405,7 @@ public class WaypointsModule extends HudModule {
 		markDeath(mc);
 		// M jumps straight to the waypoint menu.
 		while (menuKey.consumeClick()) {
-			mc.setScreen(settingsScreen(new dev.clientify.client.gui.ModListScreen(
+			mc.gui.setScreen(settingsScreen(new dev.clientify.client.gui.ModListScreen(
 					new dev.clientify.client.gui.HudEditorScreen())));
 		}
 		// The looked-at block gets its own key, unbound by default.
@@ -931,7 +931,7 @@ public class WaypointsModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		if (!frameReady || mc.level == null) {
@@ -989,7 +989,7 @@ public class WaypointsModule extends HudModule {
 		return new Vec3(x / n, y / n, z / n);
 	}
 
-	private void drawChip(GuiGraphics g, Minecraft mc, Settings s, Waypoint wp, float sx, float sy,
+	private void drawChip(GuiGraphicsExtractor g, Minecraft mc, Settings s, Waypoint wp, float sx, float sy,
 			int dist, float zoom) {
 		// The chip's own size: module scale × zoom magnification × the waypoint's own scale.
 		float scale = s.scale * zoom * wp.scale;
@@ -1025,7 +1025,7 @@ public class WaypointsModule extends HudModule {
 			g.pose().pushMatrix();
 			g.pose().translate(tx, ty + (lineH - iconS) / 2f);
 			g.pose().scale(iconS / 16f, iconS / 16f);
-			g.renderItem(icon, 0, 0);
+			g.item(icon, 0, 0);
 			g.pose().popMatrix();
 		} else if (wantIcon) {
 			// Name-only chips carry no marker square at all.

@@ -5,7 +5,7 @@ import dev.clientify.client.util.Draw;
 import dev.clientify.client.modules.WaypointsModule;
 import dev.clientify.client.modules.WaypointsModule.Waypoint;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -51,7 +51,7 @@ public class WaypointImportScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		// A plain dim, NOT vanilla's renderBackground: that one blurs the whole screen, and the mod
 		// has already spent this frame's single allowed blur on its own frosted panels. Calling it
 		// here crashed the client with "Can only blur once per frame" the moment the dialog opened.
@@ -81,7 +81,7 @@ public class WaypointImportScreen extends Screen {
 		Ui.caps(g, "Cancel", px + W - 52 + (40 - Ui.capsW("Cancel", 0.2f)) / 2, py + H - 23,
 				Ui.TEXT_DIM, 0.2f);
 
-		super.render(g, mouseX, mouseY, partialTick);
+		super.extractRenderState(g, mouseX, mouseY, partialTick);
 	}
 
 	@Override
@@ -90,11 +90,11 @@ public class WaypointImportScreen extends Screen {
 			Minecraft mc = Minecraft.getInstance();
 			WaypointsModule.waypointsIn(WaypointsModule.worldKey(mc)).add(waypoint);
 			ModuleManager.save();
-			mc.setScreen(parent);
+			mc.gui.setScreen(parent);
 			return true;
 		}
 		if (overCancel(e.x(), e.y())) {
-			Minecraft.getInstance().setScreen(parent);
+			Minecraft.getInstance().gui.setScreen(parent);
 			return true;
 		}
 		return super.mouseClicked(e, doubleClick);
@@ -102,7 +102,7 @@ public class WaypointImportScreen extends Screen {
 
 	@Override
 	public void onClose() {
-		Minecraft.getInstance().setScreen(parent);
+		Minecraft.getInstance().gui.setScreen(parent);
 	}
 
 	@Override

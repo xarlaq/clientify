@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -308,7 +308,7 @@ public class ArmorHudModule extends HudModule {
 		Settings s = (Settings) settings();
 		// In separated mode the editor shows a placeholder for every empty slot, so each
 		// piece stays draggable even when nothing is equipped.
-		boolean editorSeparate = s.separatePositions && mc.screen instanceof HudEditorScreen;
+		boolean editorSeparate = s.separatePositions && mc.gui.screen() instanceof HudEditorScreen;
 		List<PieceRef> out = new ArrayList<>(6);
 		ModuleSettings.PartPos[] armorPos = {s.headPos, s.chestPos, s.legsPos, s.feetPos};
 		net.minecraft.world.item.Item[] armorPlaceholder =
@@ -349,7 +349,7 @@ public class ArmorHudModule extends HudModule {
 				out.add(new PieceRef(ItemStack.EMPTY, s.offPos, EMPTY_OFF));
 			}
 		}
-		if (out.isEmpty() && mc.screen instanceof HudEditorScreen) {
+		if (out.isEmpty() && mc.gui.screen() instanceof HudEditorScreen) {
 			out.add(new PieceRef(new ItemStack(Items.IRON_CHESTPLATE), s.chestPos, EMPTY_ARMOR[1])); // placeholder
 		}
 		return out;
@@ -604,7 +604,7 @@ public class ArmorHudModule extends HudModule {
 	 * draws between them, so the body is the first {@code n} of those and the cap is the 1px right
 	 * edge. Nothing is tiled, so nothing doubles up.
 	 */
-	private void drawStrip(GuiGraphics g, float x, float y, int n, float scale) {
+	private void drawStrip(GuiGraphicsExtractor g, float x, float y, int n, float scale) {
 		int tw = Math.round(HOTBAR_W * scale);
 		int th = Math.round(HOTBAR_H * scale);
 		int body = Math.round((CAP + PITCH * Math.min(n, HOTBAR_W / PITCH)) * scale);
@@ -622,7 +622,7 @@ public class ArmorHudModule extends HudModule {
 	 * dividers and the caps are still vanilla's; only the bevel ends up lit from the side rather than
 	 * from above, which is not something the eye picks up at this size.
 	 */
-	private void drawStripVertical(GuiGraphics g, float x, float y, int n, float scale) {
+	private void drawStripVertical(GuiGraphicsExtractor g, float x, float y, int n, float scale) {
 		g.pose().pushMatrix();
 		// Rotating about the origin sends local +X down and local +Y to -X, so the strip is shifted
 		// right by its own thickness first to land back on the block.
@@ -632,7 +632,7 @@ public class ArmorHudModule extends HudModule {
 		g.pose().popMatrix();
 	}
 
-	private void drawIcon(GuiGraphics g, ItemStack stack, float sx, float sy, float scale, boolean bar,
+	private void drawIcon(GuiGraphicsExtractor g, ItemStack stack, float sx, float sy, float scale, boolean bar,
 			Minecraft mc, Settings s, net.minecraft.resources.Identifier empty) {
 		float inset = 0f;
 		if (s.slotBackground) {
@@ -655,15 +655,15 @@ public class ArmorHudModule extends HudModule {
 		g.pose().pushMatrix();
 		g.pose().translate(sx + inset, sy + inset);
 		g.pose().scale(scale, scale);
-		g.renderItem(stack, 0, 0);
+		g.item(stack, 0, 0);
 		if (bar) {
-			g.renderItemDecorations(mc.font, stack, 0, 0); // vanilla durability bar
+			g.itemDecorations(mc.font, stack, 0, 0); // vanilla durability bar
 		}
 		g.pose().popMatrix();
 	}
 
 	/** Draws one line of colored segments at screen (x, y). */
-	private void drawLine(GuiGraphics g, Minecraft mc, Settings s, List<TextSeg> line, float x, float y,
+	private void drawLine(GuiGraphicsExtractor g, Minecraft mc, Settings s, List<TextSeg> line, float x, float y,
 			float scale) {
 		float cx = x;
 		for (TextSeg seg : line) {
@@ -688,7 +688,7 @@ public class ArmorHudModule extends HudModule {
 	}
 
 	/** Draws one piece's icon + text block at screen (ox, oy); text column width = alignTextW (unscaled). */
-	private void drawPieceBlock(GuiGraphics g, Minecraft mc, Settings s, ItemStack stack,
+	private void drawPieceBlock(GuiGraphicsExtractor g, Minecraft mc, Settings s, ItemStack stack,
 			float ox, float oy, float alignTextW, float scale,
 			net.minecraft.resources.Identifier empty) {
 		List<List<TextSeg>> lines = lines(stack, s);
@@ -784,7 +784,7 @@ public class ArmorHudModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		List<PieceRef> pieces = pieces(mc);

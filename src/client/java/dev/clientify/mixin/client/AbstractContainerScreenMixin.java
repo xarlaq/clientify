@@ -2,7 +2,7 @@ package dev.clientify.mixin.client;
 
 import dev.clientify.client.modules.ShulkerTooltipModule;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ public class AbstractContainerScreenMixin {
 	protected @Nullable Slot hoveredSlot;
 
 	@Inject(method = "renderTooltip", at = @At("HEAD"), cancellable = true)
-	private void clientify$lockTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, CallbackInfo ci) {
+	private void clientify$lockTooltip(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, CallbackInfo ci) {
 		ItemStack hovered = hoveredSlot != null ? hoveredSlot.getItem() : ItemStack.EMPTY;
 		if (ShulkerTooltipModule.renderLocked(guiGraphics, Minecraft.getInstance().font, hovered, mouseX, mouseY)) {
 			ci.cancel();

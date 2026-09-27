@@ -83,7 +83,7 @@ public final class WaypointShareHandler {
 				.withClickEvent(new ClickEvent.RunCommand("/" + COMMAND + " " + code))
 				.withHoverEvent(new HoverEvent.ShowText(Component.literal(
 						wp.name + "\n" + coords(wp) + "\nClick to add this waypoint"))));
-		mc.gui.getChat().addMessage(full);
+		mc.gui.hud.getChat().addMessage(full);
 		return false;
 	}
 
@@ -98,11 +98,11 @@ public final class WaypointShareHandler {
 		Waypoint wp = WaypointShare.decode(code);
 		mc.execute(() -> {
 			if (wp == null) {
-				mc.gui.getChat().addMessage(Component.literal("That is not a Clientify waypoint code.")
+				mc.gui.hud.getChat().addMessage(Component.literal("That is not a Clientify waypoint code.")
 						.withStyle(ChatFormatting.RED));
 				return;
 			}
-			mc.setScreen(new WaypointImportScreen(wp, mc.screen));
+			mc.gui.setScreen(new WaypointImportScreen(wp, mc.gui.screen()));
 		});
 	}
 }

@@ -10,7 +10,7 @@ import dev.clientify.client.hud.HudText;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -106,7 +106,7 @@ public class ActionBarModule extends HudModule {
 	}
 
 	/** Called by GuiActionBarMixin in place of vanilla overlay-message rendering. */
-	public void renderMessage(GuiGraphics g, Component message, int alpha, boolean vanillaAnimated,
+	public void renderMessage(GuiGraphicsExtractor g, Component message, int alpha, boolean vanillaAnimated,
 			int animatedColor) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
@@ -124,10 +124,10 @@ public class ActionBarModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
-		if (mc.screen instanceof HudEditorScreen && current == null && s.editorPreview) {
+		if (mc.gui.screen() instanceof HudEditorScreen && current == null && s.editorPreview) {
 			renderMessage(g, Component.literal("Action Bar"), 255, false, 0);
 			current = null;
 		}

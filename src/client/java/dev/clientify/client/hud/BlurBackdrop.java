@@ -105,12 +105,12 @@ public final class BlurBackdrop {
 			return null;
 		}
 		GlobalSettings gs = ClientifyConfig.global();
-		if (mc.screen instanceof PanelScreen) {
+		if (mc.gui.screen() instanceof PanelScreen) {
 			return gs.menuBlur ? clampStrength(gs.menuBlurStrength) : null;
 		}
 		// The blur radius is a per-frame global, so overriding it while ANY vanilla screen is
 		// open would also change that screen's own blur. Our module blur only applies in-world.
-		if (mc.screen != null) {
+		if (mc.gui.screen() != null) {
 			return null;
 		}
 		if (wantsBlur()) {
@@ -201,7 +201,7 @@ public final class BlurBackdrop {
 		}
 	}
 
-	/** Exposes the target's color texture to GuiGraphics.blit without owning it. */
+	/** Exposes the target's color texture to GuiGraphicsExtractor.blit without owning it. */
 	private static final class WrapTexture extends AbstractTexture {
 		void bind(GpuTexture gpuTexture, GpuTextureView view) {
 			this.texture = gpuTexture;

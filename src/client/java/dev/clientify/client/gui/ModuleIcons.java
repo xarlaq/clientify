@@ -2,7 +2,7 @@ package dev.clientify.client.gui;
 
 import dev.clientify.client.ClientifyClient;
 import java.util.Map;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -67,7 +67,7 @@ public final class ModuleIcons {
 	 * Draws module {@code moduleId}'s icon at {@code size} px, tinted {@code argb}. Returns false
 	 * when that module has no icon, leaving the caller to draw whatever it did before.
 	 */
-	public static boolean draw(GuiGraphics g, String moduleId, int x, int y, int size, int argb) {
+	public static boolean draw(GuiGraphicsExtractor g, String moduleId, int x, int y, int size, int argb) {
 		Integer cell = CELLS.get(moduleId);
 		if (cell == null) {
 			return false;

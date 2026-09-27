@@ -128,7 +128,7 @@ public class SprintModule extends TextHudModule {
 	 */
 	private boolean boostActive(Minecraft mc) {
 		Settings s = (Settings) settings();
-		return isEnabled() && s.flyBoost && mc.player != null && mc.screen == null
+		return isEnabled() && s.flyBoost && mc.player != null && mc.gui.screen() == null
 				&& mc.player.getAbilities().mayfly
 				&& dev.clientify.client.util.HoldableKey.isHeld(mc.options.keySprint);
 	}

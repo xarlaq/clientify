@@ -3,7 +3,7 @@ package dev.clientify.client.hud;
 import dev.clientify.client.util.RectSplit;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Keeps module backgrounds from blending into each other. Two translucent chips that overlap
@@ -52,7 +52,7 @@ public final class ChromeMask {
 	 * under any pose — the rectangle is in screen pixels either way. {@code radius} is the
 	 * chip's outer corner radius, also in screen pixels.
 	 */
-	public static void draw(GuiGraphics g, float x, float y, float w, float h, float radius, Runnable sink) {
+	public static void draw(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, Runnable sink) {
 		if (!active || w <= 0 || h <= 0) {
 			sink.run();
 			return;
@@ -109,7 +109,7 @@ public final class ChromeMask {
 	 * translate+scale, and its clip must not be scaled twice. Restoring the pose afterwards does
 	 * not disturb the rectangle already pushed.
 	 */
-	private static void scissor(GuiGraphics g, RectSplit.R r) {
+	private static void scissor(GuiGraphicsExtractor g, RectSplit.R r) {
 		g.pose().pushMatrix();
 		g.pose().identity();
 		g.enableScissor(r.x(), r.y(), r.right(), r.bottom());

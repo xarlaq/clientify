@@ -10,7 +10,7 @@ import dev.clientify.client.hud.ModuleManager;
 import dev.clientify.client.util.Draw;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -43,7 +43,7 @@ public class GlobalSettingsScreen extends SettingsRowsScreen {
 	@Override
 	protected void onModsTab() {
 		ModuleManager.save();
-		minecraft.setScreen(list);
+		minecraft.gui.setScreen(list);
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class GlobalSettingsScreen extends SettingsRowsScreen {
 	}
 
 	@Override
-	protected void renderRowsHeader(GuiGraphics g, int mouseX, int mouseY) {
+	protected void renderRowsHeader(GuiGraphicsExtractor g, int mouseX, int mouseY) {
 		Rect br = backRect();
 		if (br.contains(mouseX, mouseY)) {
 			Draw.smoothRounded(g, (int) br.x(), (int) br.y(), 16, 16, 8, 0x1EFFFFFF);
@@ -212,7 +212,7 @@ public class GlobalSettingsScreen extends SettingsRowsScreen {
 	protected boolean rowsHeaderClicked(MouseButtonEvent e) {
 		if (backRect().contains(e.x(), e.y())) {
 			ModuleManager.save();
-			minecraft.setScreen(list);
+			minecraft.gui.setScreen(list);
 			return true;
 		}
 		return false;

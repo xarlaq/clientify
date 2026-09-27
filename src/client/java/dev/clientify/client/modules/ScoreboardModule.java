@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -187,7 +187,7 @@ public class ScoreboardModule extends HudModule {
 	}
 
 	private boolean editorDemo(Minecraft mc) {
-		return title == null && mc.screen instanceof HudEditorScreen;
+		return title == null && mc.gui.screen() instanceof HudEditorScreen;
 	}
 
 	/** Title/lines used for sizing: the live ones, else the editor demo — so the hitbox fits. */
@@ -230,7 +230,7 @@ public class ScoreboardModule extends HudModule {
 	}
 
 	/** Draws the sidebar: header plate, body plate, then the text; border wraps both. */
-	public void renderSidebar(GuiGraphics g, Minecraft mc) {
+	public void renderSidebar(GuiGraphicsExtractor g, Minecraft mc) {
 		Settings s = (Settings) settings();
 		if (s.hide || title == null) {
 			return;
@@ -290,7 +290,7 @@ public class ScoreboardModule extends HudModule {
 	 * characters falling back to white; anything else paints the whole run from the spec, so its
 	 * chroma and gradient modes travel across the text rather than per character.
 	 */
-	private void drawText(GuiGraphics g, Minecraft mc, ModuleSettings s, Component text,
+	private void drawText(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, Component text,
 			float x, float y, ColorSpec override) {
 		if (override == null) {
 			HudText.drawComponent(g, mc, s, text, x, y, 0xFFFFFFFF, null);
@@ -320,7 +320,7 @@ public class ScoreboardModule extends HudModule {
 		return s.bgBlur && (s.background || (!s.hideTitle && s.headerBackground));
 	}
 
-	private void plate(GuiGraphics g, Minecraft mc, Settings s, int x, int y, int w, int h,
+	private void plate(GuiGraphicsExtractor g, Minecraft mc, Settings s, int x, int y, int w, int h,
 			int radius, int color, boolean roundTop, boolean roundBottom) {
 		if (w <= 0 || h <= 0) {
 			return;
@@ -342,7 +342,7 @@ public class ScoreboardModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		if (editorDemo(mc)) {
 			updateContent(Component.literal("Scoreboard"), demoLines(mc));

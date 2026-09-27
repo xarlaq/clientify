@@ -12,7 +12,7 @@ import dev.clientify.client.util.TotemCounts;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -152,7 +152,7 @@ public class TotemModule extends HudModule {
 	public TotemModule() {
 		super("totem", "Totem Tweaks");
 		instance = this;
-		resetKey = net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.registerKeyBinding(
+		resetKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyBinding(
 				new net.minecraft.client.KeyMapping("key.clientify.totem_reset",
 						org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN,
 						dev.clientify.client.ClientifyClient.KEY_CATEGORY));
@@ -427,7 +427,7 @@ public class TotemModule extends HudModule {
 			}
 		}
 		// Something to aim at while placing it: an empty list has no size and cannot be dragged.
-		if (out.isEmpty() && mc.screen instanceof HudEditorScreen) {
+		if (out.isEmpty() && mc.gui.screen() instanceof HudEditorScreen) {
 			out.add(new Line("Player", 0xFFFFFFFF, 1));
 		}
 		counterToken = token;
@@ -457,10 +457,10 @@ public class TotemModule extends HudModule {
 
 	private boolean counterShowing(Minecraft mc, Settings s) {
 		return s != null && s.counter && s.counterHud
-				&& (mc.screen instanceof HudEditorScreen || !TotemCounts.isEmpty());
+				&& (mc.gui.screen() instanceof HudEditorScreen || !TotemCounts.isEmpty());
 	}
 
-	private void drawCounter(GuiGraphics g, Minecraft mc, Settings s) {
+	private void drawCounter(GuiGraphicsExtractor g, Minecraft mc, Settings s) {
 		List<Line> lines = counterLines(mc, s);
 		if (lines.isEmpty()) {
 			return;
@@ -495,7 +495,7 @@ public class TotemModule extends HudModule {
 				g.pose().pushMatrix();
 				g.pose().translate(x, y);
 				g.pose().scale(COUNTER_ICON / 16f * scale, COUNTER_ICON / 16f * scale);
-				g.renderItem(TOTEM, 0, 0);
+				g.item(TOTEM, 0, 0);
 				g.pose().popMatrix();
 				x += (COUNTER_ICON + COUNTER_GAP) * scale;
 			}
@@ -598,7 +598,7 @@ public class TotemModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = active();
 		if (s == null) {
@@ -610,14 +610,14 @@ public class TotemModule extends HudModule {
 		// The placement box is only ever visible while you are placing it: the real animation is
 		// vanilla's, and drawing a second totem over the game the rest of the time would leave a
 		// permanent totem on screen.
-		if (!s.showInEditor || s.hideAnimation || !(mc.screen instanceof HudEditorScreen)) {
+		if (!s.showInEditor || s.hideAnimation || !(mc.gui.screen() instanceof HudEditorScreen)) {
 			return;
 		}
 		Rect r = bounds(mc, graphics.guiWidth(), graphics.guiHeight());
 		graphics.pose().pushMatrix();
 		graphics.pose().translate(r.x() + r.w() / 2f, r.y() + r.h() / 2f);
 		graphics.pose().scale(r.w() / 16f, r.h() / 16f);
-		graphics.renderItem(TOTEM, -8, -8);
+		graphics.item(TOTEM, -8, -8);
 		graphics.pose().popMatrix();
 	}
 

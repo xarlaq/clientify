@@ -2,7 +2,7 @@ package dev.clientify.client.gui.widget;
 
 import dev.clientify.client.gui.Ui;
 import dev.clientify.client.util.Draw;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.InputWithModifiers;
@@ -38,7 +38,7 @@ public class GlassButton extends AbstractButton {
 	}
 
 	@Override
-	protected void renderContents(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	protected void extractContents(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		int x = getX(), y = getY(), w = getWidth(), h = getHeight();
 		boolean hovered = isHoveredOrFocused();
 		switch (style) {

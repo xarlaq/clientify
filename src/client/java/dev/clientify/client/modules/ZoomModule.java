@@ -6,11 +6,11 @@ import dev.clientify.client.gui.ModuleSettingsScreen;
 import dev.clientify.client.gui.SettingsRowsScreen;
 import dev.clientify.client.hud.HudModule;
 import java.util.List;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import com.mojang.blaze3d.platform.InputConstants;
 
 /**
@@ -47,7 +47,7 @@ public class ZoomModule extends HudModule {
 	public ZoomModule() {
 		super("zoom", "Zoom");
 		instance = this;
-		key = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		key = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.clientify.zoom", InputConstants.KEY_C, ClientifyClient.KEY_CATEGORY));
 	}
 
@@ -202,6 +202,6 @@ public class ZoomModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 }

@@ -10,12 +10,12 @@ import dev.clientify.client.util.Draw;
 import dev.clientify.client.util.HoldableKey;
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -49,7 +49,7 @@ public class ShulkerTooltipModule extends HudModule {
 		instance = this;
 		lockKey = new HoldableKey("key.clientify.lock_tooltip", InputConstants.KEY_LCONTROL,
 				ClientifyClient.KEY_CATEGORY);
-		KeyBindingHelper.registerKeyBinding(lockKey); // returns the base type, so keep our own reference
+		KeyMappingHelper.registerKeyMapping(lockKey); // returns the base type, so keep our own reference
 		TooltipComponentCallback.EVENT.register(data ->
 				data instanceof ShulkerGridTooltip grid ? new ClientShulkerGridTooltip(grid) : null);
 	}
@@ -83,7 +83,7 @@ public class ShulkerTooltipModule extends HudModule {
 	 *
 	 * @param hovered the stack under the pointer, empty if none — only used to start a lock
 	 */
-	public static boolean renderLocked(GuiGraphics g, Font font, ItemStack hovered, int mouseX, int mouseY) {
+	public static boolean renderLocked(GuiGraphicsExtractor g, Font font, ItemStack hovered, int mouseX, int mouseY) {
 		if (instance == null || !instance.isEnabled() || !(instance.settings() instanceof Settings s)
 				|| !s.lockTooltip || !instance.lockKey.isHeld()) {
 			lockedStack = ItemStack.EMPTY;
@@ -207,7 +207,7 @@ public class ShulkerTooltipModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 
 	/** Marker component produced by ItemStackMixin ({@code tint} = the box's dye ARGB, 0 = default). */
@@ -252,7 +252,7 @@ public class ShulkerTooltipModule extends HudModule {
 		}
 
 		@Override
-		public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics g) {
+		public void renderImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor g) {
 			Settings s = activeSettings();
 			int w = cols() * CELL + PAD * 2;
 			int h = rows() * CELL + PAD * 2;
@@ -287,8 +287,8 @@ public class ShulkerTooltipModule extends HudModule {
 				}
 				if (i < items.size()) {
 					ItemStack stack = items.get(i);
-					g.renderItem(stack, cx + 1, cy + 1);
-					g.renderItemDecorations(font, stack, cx + 1, cy + 1);
+					g.item(stack, cx + 1, cy + 1);
+					g.itemDecorations(font, stack, cx + 1, cy + 1);
 				}
 			}
 		}

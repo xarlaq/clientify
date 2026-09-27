@@ -3,7 +3,7 @@ package dev.clientify.mixin.client;
 import dev.clientify.client.modules.ActionBarModule;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
@@ -27,7 +27,7 @@ public abstract class GuiActionBarMixin {
 	private boolean animateOverlayMessageColor;
 
 	@Inject(method = "renderOverlayMessage", at = @At("HEAD"), cancellable = true)
-	private void clientify$actionBarTweaks(GuiGraphics g, DeltaTracker deltaTracker, CallbackInfo ci) {
+	private void clientify$actionBarTweaks(GuiGraphicsExtractor g, DeltaTracker deltaTracker, CallbackInfo ci) {
 		ActionBarModule.Settings s = ActionBarModule.active();
 		if (s == null) {
 			return;

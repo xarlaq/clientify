@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Coordinates. Vertical: X/Y/Z/Biome stacked, Direction pinned to the right of the Y line
@@ -296,7 +296,7 @@ public class CoordsModule extends HudModule {
 	}
 
 	private boolean placeholder(Minecraft mc) {
-		return mc.player == null && mc.screen instanceof dev.clientify.client.gui.HudEditorScreen;
+		return mc.player == null && mc.gui.screen() instanceof dev.clientify.client.gui.HudEditorScreen;
 	}
 
 	// The cell lists are rebuilt for every measurement and again to draw; one build per pass is
@@ -477,11 +477,11 @@ public class CoordsModule extends HudModule {
 		return lines * lineH(mc, s) + (lines - 1) * LINE_SPACING + s.extraH(PAD);
 	}
 
-	private void drawCell(GuiGraphics g, Minecraft mc, Settings s, Cell c, float x, float y) {
+	private void drawCell(GuiGraphicsExtractor g, Minecraft mc, Settings s, Cell c, float x, float y) {
 		drawCell(g, mc, s, c, x, y, s.scale);
 	}
 
-	private void drawCell(GuiGraphics g, Minecraft mc, Settings s, Cell c, float x, float y, float scale) {
+	private void drawCell(GuiGraphicsExtractor g, Minecraft mc, Settings s, Cell c, float x, float y, float scale) {
 		if (!c.label().isEmpty()) {
 			HudText.draw(g, mc, s, c.label(), x, y, c.labelSpec(), 0, c.label().length(), scale);
 			x += HudText.width(mc, s, c.label(), scale);
@@ -556,7 +556,7 @@ public class CoordsModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		float scale = s.scale;

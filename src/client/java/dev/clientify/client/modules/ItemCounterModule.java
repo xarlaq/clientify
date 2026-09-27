@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -297,7 +297,7 @@ public class ItemCounterModule extends HudModule {
 			return false;
 		}
 		return !entry.hideEmpty || count(mc, entry) > 0
-				|| mc.screen instanceof dev.clientify.client.gui.HudEditorScreen;
+				|| mc.gui.screen() instanceof dev.clientify.client.gui.HudEditorScreen;
 	}
 
 	@Override
@@ -410,7 +410,7 @@ public class ItemCounterModule extends HudModule {
 	// ---- render ----
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		for (Entry entry : settings2().entries) {
 			if (!visible(mc, entry)) {
@@ -422,7 +422,7 @@ public class ItemCounterModule extends HudModule {
 		}
 	}
 
-	private void drawChip(GuiGraphics g, Minecraft mc, Entry entry, Rect r) {
+	private void drawChip(GuiGraphicsExtractor g, Minecraft mc, Entry entry, Rect r) {
 		// Content is laid out inside the background as DRAWN, not as measured: the fill lands on
 		// whole pixels, and centring against the unrounded rect leaves it half a pixel off.
 		int bx = Math.round(r.x());
@@ -468,7 +468,7 @@ public class ItemCounterModule extends HudModule {
 			g.pose().pushMatrix();
 			g.pose().translate(x, iconY);
 			g.pose().scale(scale, scale);
-			g.renderItem(stack, 0, 0);
+			g.item(stack, 0, 0);
 			g.pose().popMatrix();
 			if (entry.countOnIcon()) {
 				// Bottom-right of the icon like a slot, but the number always shows: a count of one
@@ -492,7 +492,7 @@ public class ItemCounterModule extends HudModule {
 		}
 	}
 
-	private void paintChip(GuiGraphics g, int x, int y, int w, int h, int rad, int argb, boolean blur) {
+	private void paintChip(GuiGraphicsExtractor g, int x, int y, int w, int h, int rad, int argb, boolean blur) {
 		if (blur) {
 			Draw.backdropRounded(g, BlurBackdrop.TEXTURE_ID, x, y, w, h, rad,
 					0, 0, 1f, g.guiWidth(), g.guiHeight(), BlurBackdrop.vFlip());

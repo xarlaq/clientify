@@ -12,7 +12,7 @@ import dev.clientify.client.util.Draw;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Tab list tweaks (tabtweaks-style) as a draggable element. Instead of a chip behind the
@@ -151,7 +151,7 @@ public class TabModule extends HudModule {
 	}
 
 	/** Called at the start of the tab list render: draws the unified panel, resets measuring. */
-	public static void beginFrame(GuiGraphics g) {
+	public static void beginFrame(GuiGraphicsExtractor g) {
 		Settings s = active();
 		accAny = false;
 		if (s == null || !panelKnown) {
@@ -197,7 +197,7 @@ public class TabModule extends HudModule {
 	 * unified panel replaces them); player row strips keep drawing in their own color.
 	 * Returns true when it handled the draw.
 	 */
-	public static boolean drawFill(GuiGraphics g, int x0, int y0, int x1, int y1, int original) {
+	public static boolean drawFill(GuiGraphicsExtractor g, int x0, int y0, int x1, int y1, int original) {
 		Settings s = active();
 		if (s == null) {
 			return false;
@@ -306,10 +306,10 @@ public class TabModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
-		if (mc.screen instanceof HudEditorScreen && s.editorPreview) {
+		if (mc.gui.screen() instanceof HudEditorScreen && s.editorPreview) {
 			Rect r = bounds(mc, g.guiWidth(), g.guiHeight());
 			g.fill(Math.round(r.x()), Math.round(r.y()), Math.round(r.x() + r.w()),
 					Math.round(r.y() + r.h()), 0x30FFFFFF);

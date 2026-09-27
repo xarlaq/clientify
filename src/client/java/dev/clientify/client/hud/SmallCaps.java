@@ -6,7 +6,7 @@ import dev.clientify.client.ClientifyClient;
 import java.util.function.IntUnaryOperator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -172,7 +172,7 @@ public final class SmallCaps {
 	 * <p>Shadows are one pass over the whole run before the letters, as vanilla does it — drawing
 	 * each glyph's shadow just before the next glyph lays it over the neighbouring letter.
 	 */
-	public static void draw(GuiGraphics g, Font font, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Font font, String text, float x, float y,
 			IntUnaryOperator colorByIndex, boolean shadow) {
 		if (text.isEmpty()) {
 			return;
@@ -182,7 +182,7 @@ public final class SmallCaps {
 			int lx = Math.round(x);
 			for (int i = 0; i < text.length(); i++) {
 				String ch = String.valueOf(text.charAt(i));
-				g.drawString(font, ch, lx, Math.round(y), colorByIndex.applyAsInt(i), shadow);
+				g.text(font, ch, lx, Math.round(y), colorByIndex.applyAsInt(i), shadow);
 				lx += font.width(ch);
 			}
 			return;
@@ -193,7 +193,7 @@ public final class SmallCaps {
 		pass(g, font, text, x, y, colorByIndex);
 	}
 
-	private static void pass(GuiGraphics g, Font font, String text, float x, float y,
+	private static void pass(GuiGraphicsExtractor g, Font font, String text, float x, float y,
 			IntUnaryOperator colorByIndex) {
 		int cx = Math.round(x);
 		int top = Math.round(y);
@@ -203,7 +203,7 @@ public final class SmallCaps {
 			int letter = index(c);
 			if (letter < 0) {
 				String ch = String.valueOf(c);
-				g.drawString(font, ch, cx, top, color, false);
+				g.text(font, ch, cx, top, color, false);
 				cx += font.width(ch);
 				continue;
 			}

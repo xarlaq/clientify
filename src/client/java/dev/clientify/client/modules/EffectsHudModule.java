@@ -12,7 +12,7 @@ import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
@@ -192,7 +192,7 @@ public class EffectsHudModule extends HudModule {
 		if (token != effectsToken || cachedEffects == null) {
 			cachedEffects = mc.player == null ? List.of()
 					: mc.player.getActiveEffects().stream().sorted(Comparator.reverseOrder()).toList();
-			if (cachedEffects.isEmpty() && mc.screen instanceof HudEditorScreen) {
+			if (cachedEffects.isEmpty() && mc.gui.screen() instanceof HudEditorScreen) {
 				cachedEffects = SAMPLE;
 			}
 			effectsToken = token;
@@ -344,7 +344,7 @@ public class EffectsHudModule extends HudModule {
 	 * strip covers the WHOLE block (so a timer under the icon sits inside it); the per-icon
 	 * slot is a fixed square that only ever frames the icon.
 	 */
-	private void drawEffectBlock(GuiGraphics g, Minecraft mc, Settings s, MobEffectInstance e,
+	private void drawEffectBlock(GuiGraphicsExtractor g, Minecraft mc, Settings s, MobEffectInstance e,
 			float ox, float oy, float blockW, float blockH, float scale, float aMul, float red) {
 		int tint = ARGB.white(aMul);
 		// The full strip wraps the WHOLE block; content is then inset within it.
@@ -412,7 +412,7 @@ public class EffectsHudModule extends HudModule {
 		}
 		int iconPx = Math.round(ICON * scale);
 		float in = cellInset(s) * scale;
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(e.getEffect()),
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, net.minecraft.client.gui.Hud.getMobEffectSprite(e.getEffect()),
 				Math.round(iconX + in), Math.round(iconY + in), iconPx, iconPx, tint);
 
 		float ty = textTop;
@@ -436,7 +436,7 @@ public class EffectsHudModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		List<MobEffectInstance> effects = effects(mc);

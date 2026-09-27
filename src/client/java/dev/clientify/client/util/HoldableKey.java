@@ -33,7 +33,7 @@ public class HoldableKey extends KeyMapping {
 	 */
 	public static boolean isHeld(KeyMapping mapping) {
 		return mapping != null
-				&& isHeld(net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper.getBoundKeyOf(mapping));
+				&& isHeld(net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.getBoundKeyOf(mapping));
 	}
 
 	/**

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Free-form text on the HUD: any number of separately draggable text boxes, each with its
@@ -263,7 +263,7 @@ public class CustomTextModule extends HudModule {
 	}
 
 	/** A box's backdrop and fill, in screen space (boxes lay out in screen coords, not a pose). */
-	private void paintBox(GuiGraphics g, int x, int y, int w, int h, int rad, int argb, boolean blur) {
+	private void paintBox(GuiGraphicsExtractor g, int x, int y, int w, int h, int rad, int argb, boolean blur) {
 		if (blur) {
 			Draw.backdropRounded(g, BlurBackdrop.TEXTURE_ID, x, y, w, h, rad,
 					0, 0, 1f, g.guiWidth(), g.guiHeight(), BlurBackdrop.vFlip());
@@ -326,7 +326,7 @@ public class CustomTextModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		for (Box box : s.boxes) {

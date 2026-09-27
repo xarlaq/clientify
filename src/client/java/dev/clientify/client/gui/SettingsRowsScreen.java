@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -30,7 +30,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 	protected static final int RESET_W = 12;
 
 	public interface RowDraw {
-		void draw(GuiGraphics g, int y, int mx, int my);
+		void draw(GuiGraphicsExtractor g, int y, int mx, int my);
 	}
 
 	public interface RowClick {
@@ -106,7 +106,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 	protected abstract List<Row> buildRows();
 
 	/** Header above the rows (back button, title, description). */
-	protected abstract void renderRowsHeader(GuiGraphics g, int mouseX, int mouseY);
+	protected abstract void renderRowsHeader(GuiGraphicsExtractor g, int mouseX, int mouseY);
 
 	protected boolean rowsHeaderClicked(MouseButtonEvent e) {
 		return false;
@@ -130,7 +130,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 
 	// ---- shared widgets ----
 
-	protected void drawReset(GuiGraphics g, int y, int rowH, int mx, int my) {
+	protected void drawReset(GuiGraphicsExtractor g, int y, int rowH, int mx, int my) {
 		int ry = y + (rowH - RESET_W) / 2;
 		boolean hover = mx >= resetX() && mx < resetX() + RESET_W && my >= ry && my < ry + RESET_W
 				&& my >= rowY0 && my <= rowY1;
@@ -457,7 +457,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 
 	/** Per-tile painter for {@link #tiles}: draw the tile's content inside (x,y,size,size). */
 	public interface TileDraw {
-		void draw(GuiGraphics g, int index, int x, int y, int size, boolean hover, boolean selected);
+		void draw(GuiGraphicsExtractor g, int index, int x, int y, int size, boolean hover, boolean selected);
 	}
 
 	/** A row of selectable square tiles (image pickers); the selected one gets an accent ring. */
@@ -505,7 +505,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 		gearClickY = y;
 	}
 
-	protected void drawGear(GuiGraphics g, int x, int y, boolean lit) {
+	protected void drawGear(GuiGraphicsExtractor g, int x, int y, boolean lit) {
 		if (!Textures.ensure()) {
 			return;
 		}
@@ -1016,7 +1016,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 		}
 	}
 
-	private void drawColorCell(GuiGraphics g, String label, ModuleSettings.ColorSpec spec, int x, int y,
+	private void drawColorCell(GuiGraphicsExtractor g, String label, ModuleSettings.ColorSpec spec, int x, int y,
 			int width) {
 		boolean open = expandedSpec == spec;
 		Draw.smoothRoundedBordered(g, x, y + 3, 12, 12, 3, 0xFF000000 | spec.colorAt(0, 1),
@@ -1075,13 +1075,13 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 			float[] cur = Colors.rgbToHsv(activeRgb());
 			int cx = (int) (sv.x() + cur[1] * 55);
 			int cy = (int) (sv.y() + (1 - cur[2]) * 55);
-			g.renderOutline(cx - 1, cy - 1, 4, 4, 0xFFFFFFFF);
+			g.outline(cx - 1, cy - 1, 4, 4, 0xFFFFFFFF);
 
 			for (int j = 0; j < 56; j++) {
 				g.fill((int) hue.x(), (int) hue.y() + j, (int) (hue.x() + hue.w()), (int) hue.y() + j + 1,
 						Colors.hsv(j / 55f, 1f, 1f));
 			}
-			g.renderOutline((int) hue.x() - 1, (int) (hue.y() + pickerHue * 55) - 1, 10, 3, 0xFFFFFFFF);
+			g.outline((int) hue.x() - 1, (int) (hue.y() + pickerHue * 55) - 1, 10, 3, 0xFFFFFFFF);
 
 			// Opacity of the active color (the alpha byte of its hex)
 			if (!opaqueOnly.contains(specGet.get())) {
@@ -1625,7 +1625,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 
 	// ---- shared drawing ----
 
-	protected void drawPill(GuiGraphics g, int x, int y, boolean on) {
+	protected void drawPill(GuiGraphicsExtractor g, int x, int y, boolean on) {
 		Draw.smoothRounded(g, x, y, 26, 13, 6, on ? Ui.accent() : 0x30FFFFFF);
 		int knob = 9;
 		int kx = on ? x + 26 - knob - 2 : x + 2;
@@ -1641,7 +1641,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 	 * The pill for a switch that cannot be used: off, and greyed rather than red, so it reads as
 	 * "not available here" rather than as something that is merely turned off.
 	 */
-	protected void drawPillDim(GuiGraphics g, int x, int y) {
+	protected void drawPillDim(GuiGraphicsExtractor g, int x, int y) {
 		Draw.smoothRounded(g, x, y, 26, 13, 6, 0x18FFFFFF);
 		Draw.smoothRounded(g, x + 2, y + 2, 9, 9, 4, 0x60F4F4F6);
 		MenuFont.draw(g, "N/A", x + 12.5f, y + 3.5f, 0x80EDEDF2, 5f, false, 0.2f);
@@ -1722,7 +1722,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 				&& e.y() >= track.y() - 6 && e.y() < track.y() + 10;
 	}
 
-	protected void drawSlider(GuiGraphics g, Rect track, float frac, String valueText) {
+	protected void drawSlider(GuiGraphicsExtractor g, Rect track, float frac, String valueText) {
 		frac = clamp01(frac);
 		int x = (int) track.x();
 		int y = (int) track.y();
@@ -1741,7 +1741,7 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 	// ---- render + input ----
 
 	@Override
-	protected void renderMain(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	protected void renderMain(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		renderRowsHeader(g, mouseX, mouseY);
 		hexBox.visible = false;
 		onRowsRenderStart();

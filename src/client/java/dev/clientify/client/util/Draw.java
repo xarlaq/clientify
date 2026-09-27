@@ -1,11 +1,11 @@
 package dev.clientify.client.util;
 
 import dev.clientify.client.gui.Textures;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 
 /**
- * Shape helpers on GuiGraphics only — no custom shaders, so everything works unchanged on
+ * Shape helpers on GuiGraphicsExtractor only — no custom shaders, so everything works unchanged on
  * OpenGL, Sodium, VulkanMod and OptiFine.
  *
  * <p>Rounded corners are GPU-smooth: high-res quarter-disc masks (see {@link Textures}) are
@@ -43,7 +43,7 @@ public final class Draw {
 	 * anti-aliased pixel at the exact arc boundary. Used only as the fallback until the
 	 * corner-mask textures are ready.
 	 */
-	private static void aaFillCorner(GuiGraphics g, int cx, int cy, int r, boolean left, boolean top, int argb) {
+	private static void aaFillCorner(GuiGraphicsExtractor g, int cx, int cy, int r, boolean left, boolean top, int argb) {
 		for (int j = 0; j < r; j++) {
 			int py = top ? cy - 1 - j : cy + j;
 			double dy = (py + 0.5) - cy;
@@ -69,7 +69,7 @@ public final class Draw {
 	}
 
 	/** One rounded corner outline: 1px arc, sub-pixel anti-aliased (texture-less fallback). */
-	private static void aaBorderCorner(GuiGraphics g, int cx, int cy, int r, boolean left, boolean top, int argb) {
+	private static void aaBorderCorner(GuiGraphicsExtractor g, int cx, int cy, int r, boolean left, boolean top, int argb) {
 		for (int j = 0; j < r; j++) {
 			int py = top ? cy - 1 - j : cy + j;
 			double dy = (py + 0.5) - cy;
@@ -87,7 +87,7 @@ public final class Draw {
 	 * Smooth rounded solid fill via GPU-filtered corner masks — crisp at any GUI scale.
 	 * Falls back to the pixel-AA {@link #roundedFill} until the textures are ready.
 	 */
-	public static void smoothRounded(GuiGraphics g, int x, int y, int w, int h, int r, int argb) {
+	public static void smoothRounded(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int argb) {
 		r = clampRadius(r, w, h);
 		if (w <= 0 || h <= 0) {
 			return;
@@ -114,7 +114,7 @@ public final class Draw {
 	 * Smooth rounded outline via GPU-filtered quarter-ring masks + crisp straight edges — the
 	 * outline counterpart to {@link #smoothRounded}. Falls back to {@link #roundedBorder}.
 	 */
-	public static void smoothBorder(GuiGraphics g, int x, int y, int w, int h, int r, int argb) {
+	public static void smoothBorder(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int argb) {
 		r = clampRadius(r, w, h);
 		if (w <= 0 || h <= 0) {
 			return;
@@ -140,7 +140,7 @@ public final class Draw {
 	 * corner ring masks whose band matches t/r exactly — one seamless piece (unlike stacked
 	 * 1px arcs, whose AA edges leave seams).
 	 */
-	public static void thickBorder(GuiGraphics g, int x, int y, int w, int h, int r, int t, int argb) {
+	public static void thickBorder(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int t, int argb) {
 		r = clampRadius(r, w, h);
 		t = Math.max(1, t);
 		if (w <= 0 || h <= 0) {
@@ -169,7 +169,7 @@ public final class Draw {
 		g.blit(RenderPipelines.GUI_TEXTURED, rings[3], x + w - r, y + h - r, 0f, 0f, r, r, n, n, n, n, argb);
 	}
 
-	public static void roundedFill(GuiGraphics g, int x, int y, int w, int h, int r, int argb) {
+	public static void roundedFill(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int argb) {
 		r = clampRadius(r, w, h);
 		if (w <= 0 || h <= 0) {
 			return;
@@ -187,13 +187,13 @@ public final class Draw {
 		aaFillCorner(g, x + w - r, y + h - r, r, false, false, argb);
 	}
 
-	public static void roundedBorder(GuiGraphics g, int x, int y, int w, int h, int r, int argb) {
+	public static void roundedBorder(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int argb) {
 		r = clampRadius(r, w, h);
 		if (w <= 0 || h <= 0) {
 			return;
 		}
 		if (r == 0) {
-			g.renderOutline(x, y, w, h, argb);
+			g.outline(x, y, w, h, argb);
 			return;
 		}
 		g.fill(x + r, y, x + w - r, y + 1, argb);           // top
@@ -211,7 +211,7 @@ public final class Draw {
 	 * the full rect and the fill colour is drawn inset by {@code t}, so the border is a true
 	 * ring with no translucent show-through.
 	 */
-	public static void smoothRoundedBordered(GuiGraphics g, int x, int y, int w, int h, int r,
+	public static void smoothRoundedBordered(GuiGraphicsExtractor g, int x, int y, int w, int h, int r,
 			int fillArgb, int borderArgb, int t) {
 		smoothRounded(g, x, y, w, h, r, borderArgb);
 		smoothRounded(g, x + t, y + t, w - 2 * t, h - 2 * t, Math.max(0, r - t), fillArgb);
@@ -224,7 +224,7 @@ public final class Draw {
 	 * screen rect (screenX/screenY/scale), so the sample always sits exactly behind the
 	 * panel. Pass screenX/screenY = 0 and scale = 1 when drawing at absolute screen coords.
 	 */
-	public static void backdropRounded(GuiGraphics g, net.minecraft.resources.Identifier tex,
+	public static void backdropRounded(GuiGraphicsExtractor g, net.minecraft.resources.Identifier tex,
 			int x, int y, int w, int h, int r,
 			float screenX, float screenY, float scale, float screenW, float screenH, boolean vFlip) {
 		r = clampRadius(r, w, h);
@@ -242,7 +242,7 @@ public final class Draw {
 		}
 	}
 
-	private static void backdropRow(GuiGraphics g, net.minecraft.resources.Identifier tex,
+	private static void backdropRow(GuiGraphicsExtractor g, net.minecraft.resources.Identifier tex,
 			int lx, int ly, int lw, int lh,
 			float ox, float oy, float scale, float invW, float invH, boolean vFlip) {
 		if (lw <= 0 || lh <= 0) {
@@ -261,7 +261,7 @@ public final class Draw {
 	 * Smooth rounded VERTICAL gradient fill: gradient bands + corner masks tinted with the
 	 * gradient color at their height (a close approximation at small radii).
 	 */
-	public static void smoothRoundedGradient(GuiGraphics g, int x, int y, int w, int h, int r, int top, int bottom) {
+	public static void smoothRoundedGradient(GuiGraphicsExtractor g, int x, int y, int w, int h, int r, int top, int bottom) {
 		r = clampRadius(r, w, h);
 		if (w <= 0 || h <= 0) {
 			return;

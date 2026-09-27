@@ -14,7 +14,7 @@ import java.util.List;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -453,13 +453,13 @@ public class AttackIndicatorModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		if (s == null || mc.player == null) {
 			return;
 		}
-		boolean editor = mc.screen instanceof HudEditorScreen;
+		boolean editor = mc.gui.screen() instanceof HudEditorScreen;
 		if (!editor) {
 			// Drawing this ourselves means vanilla's own gate no longer applies, so it is
 			// re-checked here: no indicator from a third-person camera.
@@ -537,7 +537,7 @@ public class AttackIndicatorModule extends HudModule {
 	 * shape is then drawn at full size inside it, which is what lets one drawing fill in any
 	 * direction without a second copy of it.
 	 */
-	private static void clipToCharge(GuiGraphics g, Settings s, int x, int y, int w, int h,
+	private static void clipToCharge(GuiGraphicsExtractor g, Settings s, int x, int y, int w, int h,
 			float progress) {
 		float p = Math.max(0f, Math.min(1f, progress));
 		int fw = Math.max(1, Math.round(w * p));
@@ -558,7 +558,7 @@ public class AttackIndicatorModule extends HudModule {
 	 * the overload that takes a sub-region draws it at its own size — no scaling — so clipping a
 	 * full-size scaled draw is the only way the bar can both fill and follow the scale slider.
 	 */
-	private void renderVanillaStyle(GuiGraphics g, Settings s, Rect r,
+	private void renderVanillaStyle(GuiGraphicsExtractor g, Settings s, Rect r,
 			com.mojang.blaze3d.pipeline.RenderPipeline pipeline, float progress, boolean ready,
 			boolean inRange) {
 		int x = Math.round(r.x());

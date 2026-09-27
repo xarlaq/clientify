@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import dev.clientify.client.modules.OverlayModule;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,8 +26,8 @@ public abstract class GuiOverlayMixin {
 	@WrapOperation(method = "renderCameraOverlays",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/Gui;renderTextureOverlay("
-							+ "Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/Identifier;F)V"))
-	private void clientify$fadeOverlay(Gui gui, GuiGraphics guiGraphics, Identifier texture, float alpha,
+							+ "Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;F)V"))
+	private void clientify$fadeOverlay(Gui gui, GuiGraphicsExtractor guiGraphics, Identifier texture, float alpha,
 			Operation<Void> original) {
 		float opacity = OverlayModule.overlayOpacity(texture);
 		if (opacity <= 0f) {
@@ -38,9 +38,9 @@ public abstract class GuiOverlayMixin {
 
 	@WrapOperation(method = "renderSpyglassOverlay",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;"
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;"
 							+ "Lnet/minecraft/resources/Identifier;IIFFIIII)V"))
-	private void clientify$fadeScope(GuiGraphics guiGraphics, RenderPipeline pipeline, Identifier texture,
+	private void clientify$fadeScope(GuiGraphicsExtractor guiGraphics, RenderPipeline pipeline, Identifier texture,
 			int x, int y, float u, float v, int w, int h, int texW, int texH, Operation<Void> original) {
 		float opacity = OverlayModule.spyglassOpacity();
 		if (opacity >= 1f) {
@@ -54,7 +54,7 @@ public abstract class GuiOverlayMixin {
 
 	@ModifyArg(method = "renderSpyglassOverlay",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"),
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"),
 			index = 5)
 	private int clientify$fadeScopeBars(int color) {
 		float opacity = OverlayModule.spyglassOpacity();

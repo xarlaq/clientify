@@ -9,7 +9,7 @@ import dev.clientify.client.hud.Templated;
 import dev.clientify.client.util.Draw;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -50,7 +50,7 @@ public class ModuleSettingsScreen extends SettingsRowsScreen {
 	@Override
 	protected void onModsTab() {
 		ModuleManager.save();
-		minecraft.setScreen(list);
+		minecraft.gui.setScreen(list);
 	}
 
 	@Override
@@ -275,7 +275,7 @@ public class ModuleSettingsScreen extends SettingsRowsScreen {
 	}
 
 	/** One half-width entry cell: index, item icon, name box, gear, bin. */
-	private void drawCompactField(GuiGraphics g, int index, int x, int width, int y, int mx, int my,
+	private void drawCompactField(GuiGraphicsExtractor g, int index, int x, int width, int y, int mx, int my,
 			int entry) {
 		HudModule.TextField f = fields.get(index);
 		GlassEditBox box = fieldBoxes.get(index);
@@ -286,7 +286,7 @@ public class ModuleSettingsScreen extends SettingsRowsScreen {
 			g.pose().pushMatrix();
 			g.pose().translate(cursor, y + 3);
 			g.pose().scale(0.75f, 0.75f);
-			g.renderItem(icon, 0, 0);
+			g.item(icon, 0, 0);
 			g.pose().popMatrix();
 		}
 		cursor += 14;
@@ -420,7 +420,7 @@ public class ModuleSettingsScreen extends SettingsRowsScreen {
 	}
 
 	@Override
-	protected void renderRowsHeader(GuiGraphics g, int mouseX, int mouseY) {
+	protected void renderRowsHeader(GuiGraphicsExtractor g, int mouseX, int mouseY) {
 		Rect br = backRect();
 		if (br.contains(mouseX, mouseY)) {
 			Draw.smoothRounded(g, (int) br.x(), (int) br.y(), 16, 16, 8, 0x1EFFFFFF);
@@ -466,7 +466,7 @@ public class ModuleSettingsScreen extends SettingsRowsScreen {
 	protected boolean rowsHeaderClicked(MouseButtonEvent e) {
 		if (backRect().contains(e.x(), e.y())) {
 			ModuleManager.save();
-			minecraft.setScreen(list);
+			minecraft.gui.setScreen(list);
 			return true;
 		}
 		Rect rp = resetPosRect();

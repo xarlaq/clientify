@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.network.chat.numbers.StyledFormat;
@@ -32,7 +32,7 @@ public abstract class GuiScoreboardMixin {
 	private static Comparator<PlayerScoreEntry> SCORE_DISPLAY_ORDER;
 
 	@Inject(method = "displayScoreboardSidebar", at = @At("HEAD"), cancellable = true)
-	private void clientify$sidebarTweaks(GuiGraphics g, Objective objective, CallbackInfo ci) {
+	private void clientify$sidebarTweaks(GuiGraphicsExtractor g, Objective objective, CallbackInfo ci) {
 		ScoreboardModule.Settings s = ScoreboardModule.active();
 		ScoreboardModule m = ScoreboardModule.get();
 		if (s == null || m == null) {
