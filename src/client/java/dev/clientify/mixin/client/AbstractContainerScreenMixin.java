@@ -23,7 +23,7 @@ public class AbstractContainerScreenMixin {
 	@Shadow
 	protected @Nullable Slot hoveredSlot;
 
-	@Inject(method = "renderTooltip", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractTooltip", at = @At("HEAD"), cancellable = true)
 	private void clientify$lockTooltip(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, CallbackInfo ci) {
 		ItemStack hovered = hoveredSlot != null ? hoveredSlot.getItem() : ItemStack.EMPTY;
 		if (ShulkerTooltipModule.renderLocked(guiGraphics, Minecraft.getInstance().font, hovered, mouseX, mouseY)) {

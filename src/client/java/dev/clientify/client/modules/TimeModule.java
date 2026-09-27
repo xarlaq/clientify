@@ -95,6 +95,23 @@ public class TimeModule extends HudModule {
 	}
 
 	/** Called by ClientLevelDataMixin; keeps the server's day counter, swaps the time of day. */
+	/**
+	 * The overworld day clock's client instance, as the clock manager last handed it out.
+	 *
+	 * <p>Kept here rather than in either mixin because mixin classes cannot refer to each other's
+	 * statics. Compared by identity only; a stale instance from a previous level is never equal to
+	 * the live one, so it is harmless until the next hand-out replaces it.
+	 */
+	private static Object dayClock;
+
+	public static void dayClock(Object instance) {
+		dayClock = instance;
+	}
+
+	public static boolean isDayClock(Object instance) {
+		return instance == dayClock;
+	}
+
 	public static long overrideDayTime(long original) {
 		TimeModule m = instance;
 		if (m == null || !m.isEnabled() || m.settings() == null) {

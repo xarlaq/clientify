@@ -55,7 +55,7 @@ public class ScreenMixin {
 	 * screen render skipped the reset entirely — leaving the module telling the rest of the game it
 	 * was drawing scaled for good. The finally puts that beyond reach of a cancel or a throw.
 	 */
-	@WrapMethod(method = "renderWithTooltipAndSubtitles")
+	@WrapMethod(method = "extractRenderStateWithTooltipAndSubtitles")
 	private void clientify$scaleScreen(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY,
 			float partialTick, Operation<Void> original) {
 		float scale = GuiScaleModule.beginScreenDraw((Screen) (Object) this);

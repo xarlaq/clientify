@@ -137,9 +137,10 @@ public class TotemModule extends HudModule {
 	 */
 	private static float halfFovTan(Minecraft mc) {
 		float fov = 70f;
-		if (mc.gameRenderer instanceof dev.clientify.mixin.client.GameRendererFovAccessor access) {
-			float partial = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-			fov = access.clientify$getFov(mc.gameRenderer.mainCamera(), partial, false);
+		// 26.x: the camera works this out once a frame as hudFov - the HUD projection's own field of
+		// view, from the same seventy with the same death and fluid adjustments.
+		if (mc.gameRenderer.mainCamera() instanceof dev.clientify.mixin.client.CameraHudFovAccessor access) {
+			fov = access.clientify$hudFov();
 		}
 		return (float) Math.tan(Math.toRadians(fov) / 2d);
 	}
