@@ -27,7 +27,7 @@ public class GuiRenderStateMixin {
 	// submitted with rather than the ones it will be drawn at. Every other element passes through.
 	@ModifyExpressionValue(method = "findAppropriateNode",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/render/state/ScreenArea;bounds()"
+					target = "Lnet/minecraft/client/renderer/state/gui/ScreenArea;bounds()"
 							+ "Lnet/minecraft/client/gui/navigation/ScreenRectangle;"))
 	private ScreenRectangle clientify$pictureBounds(ScreenRectangle original) {
 		return GuiScaleModule.scalePictureBounds(original);

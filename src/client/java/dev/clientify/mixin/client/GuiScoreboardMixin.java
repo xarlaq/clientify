@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.numbers.NumberFormat;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Cancels vanilla's sidebar and feeds the prepared lines to the draggable Scoreboard
  * module, which draws them with its own position, font, colors and chrome.
  */
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public abstract class GuiScoreboardMixin {
 	@Shadow
 	@Final

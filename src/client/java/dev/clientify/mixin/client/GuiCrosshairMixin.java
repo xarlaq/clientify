@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.clientify.client.modules.CrosshairModule;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.injection.At;
  * every vanilla gate (first person, spectator rules, F3 3D crosshair) and the attack
  * indicator intact — the wrap only redirects the crosshair sprite itself.
  */
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public abstract class GuiCrosshairMixin {
 	@WrapOperation(
-			method = "renderCrosshair",
+			method = "extractCrosshair",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V")
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V")
 	)
 	private void clientify$customCrosshair(GuiGraphicsExtractor graphics, RenderPipeline pipeline, Identifier sprite,
 			int x, int y, int w, int h, Operation<Void> original) {

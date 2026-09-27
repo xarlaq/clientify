@@ -46,7 +46,7 @@ public abstract class GameRendererMixin {
 	@ModifyArg(method = "renderLevel",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/renderer/CachedPerspectiveProjectionMatrixBuffer;"
-							+ "getBuffer(IIF)Lcom/mojang/blaze3d/buffers/GpuBufferSlice;"),
+							+ "getBuffer(IIF)Lcom/mojang/renderpearl/api/buffers/GpuBufferSlice;"),
 			index = 2)
 	private float clientify$handFov(float fov) {
 		return ZoomModule.modifyHandFov(fov);

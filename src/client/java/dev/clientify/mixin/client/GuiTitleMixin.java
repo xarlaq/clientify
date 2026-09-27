@@ -2,7 +2,7 @@ package dev.clientify.mixin.client;
 
 import dev.clientify.client.modules.TitleModule;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Redirects vanilla title rendering into the draggable Title module (same fade math; the
  * module handles position, scale, font, chrome and opacity — or disables titles).
  */
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public abstract class GuiTitleMixin {
 	@Shadow
 	private int titleTime;
@@ -32,7 +32,7 @@ public abstract class GuiTitleMixin {
 	@Shadow
 	private int titleFadeOutTime;
 
-	@Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractTitle", at = @At("HEAD"), cancellable = true)
 	private void clientify$titleTweaks(GuiGraphicsExtractor g, DeltaTracker deltaTracker, CallbackInfo ci) {
 		TitleModule.Settings s = TitleModule.active();
 		if (s == null) {

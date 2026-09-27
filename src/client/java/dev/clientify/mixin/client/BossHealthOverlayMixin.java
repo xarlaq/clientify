@@ -78,7 +78,7 @@ public abstract class BossHealthOverlayMixin {
 	/** Recolors the bar sprites by swapping in the tinted blitSprite overload. */
 	@WrapOperation(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;I[Lnet/minecraft/resources/Identifier;[Lnet/minecraft/resources/Identifier;)V",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIII)V"))
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIII)V"))
 	private void clientify$barColor(GuiGraphicsExtractor g, com.mojang.renderpearl.api.pipeline.RenderPipeline pipeline,
 			net.minecraft.resources.Identifier sprite, int texW, int texH, int u, int v, int x, int y,
 			int w, int h, Operation<Void> original) {

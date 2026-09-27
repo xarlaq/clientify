@@ -2,7 +2,7 @@ package dev.clientify.mixin.client;
 
 import dev.clientify.client.modules.ActionBarModule;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Redirects vanilla action-bar (overlay message) rendering into the draggable Action Bar
  * module (same fade math; module handles position/scale/font/chrome).
  */
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public abstract class GuiActionBarMixin {
 	@Shadow
 	private @Nullable Component overlayMessageString;
@@ -26,7 +26,7 @@ public abstract class GuiActionBarMixin {
 	@Shadow
 	private boolean animateOverlayMessageColor;
 
-	@Inject(method = "renderOverlayMessage", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractOverlayMessage", at = @At("HEAD"), cancellable = true)
 	private void clientify$actionBarTweaks(GuiGraphicsExtractor g, DeltaTracker deltaTracker, CallbackInfo ci) {
 		ActionBarModule.Settings s = ActionBarModule.active();
 		if (s == null) {

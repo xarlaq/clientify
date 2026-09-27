@@ -28,7 +28,7 @@ public class PictureInPictureRendererMixin {
 	// blitTexture is required to hit on vanilla but NOT on VulkanMod, which merges that method
 	// into its own and leaves nothing of ours to attach to. Required, it took the game down at
 	// startup; optional, the picture in picture sizing is simply left to VulkanMod there.
-	private static final String STATE = "Lnet/minecraft/client/gui/render/state/pip/PictureInPictureRenderState;";
+	private static final String STATE = "Lnet/minecraft/client/renderer/state/gui/pip/PictureInPictureRenderState;";
 
 	// Everything below runs inside prepare, blitTexture included, so one lookup covers the lot.
 	@Inject(method = "prepare", at = @At("HEAD"))
