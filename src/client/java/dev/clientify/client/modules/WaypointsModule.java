@@ -1,5 +1,6 @@
 package dev.clientify.client.modules;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.clientify.client.ClientifyClient;
 import dev.clientify.client.config.ModuleSettings;
 import dev.clientify.client.config.ModuleSettings.ColorSpec;
@@ -161,11 +162,11 @@ public class WaypointsModule extends HudModule {
 		super("waypoints", "Waypoints");
 		instance = this;
 		key = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-				"key.clientify.waypoint", GLFW.GLFW_KEY_N, ClientifyClient.KEY_CATEGORY));
+				"key.clientify.waypoint", InputConstants.KEY_N, ClientifyClient.KEY_CATEGORY));
 		lookKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"key.clientify.waypoint_look", GLFW.GLFW_KEY_UNKNOWN, ClientifyClient.KEY_CATEGORY));
 		menuKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-				"key.clientify.waypoint_menu", GLFW.GLFW_KEY_M, ClientifyClient.KEY_CATEGORY));
+				"key.clientify.waypoint_menu", InputConstants.KEY_M, ClientifyClient.KEY_CATEGORY));
 	}
 
 	/** Magnification of the current view versus the player's own FOV (1 = not zoomed). */

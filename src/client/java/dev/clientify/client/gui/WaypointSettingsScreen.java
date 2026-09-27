@@ -1,5 +1,6 @@
 package dev.clientify.client.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.clientify.client.config.ClientifyConfig;
 import dev.clientify.client.gui.widget.GlassEditBox;
 import dev.clientify.client.hud.HudModule.Rect;
@@ -341,7 +342,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 			}
 			Entry en = rows.get(slot);
 			// Right-click arms the row (bin appears); the pencil renames — same as profiles.
-			if (en.kind() == Entry.WORLD && e.button() == 1) {
+			if (en.kind() == Entry.WORLD && e.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 				deleteArmedWorld = en.value().equals(deleteArmedWorld) ? null : en.value();
 				return true;
 			}
@@ -993,7 +994,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 			confirmOpen = false;
 			return true;
 		}
-		if (renamingWaypoint != null && (e.isEscape() || e.key() == 257 || e.key() == 335)) {
+		if (renamingWaypoint != null && (e.isEscape() || e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_NUMPADENTER)) {
 			renamingWaypoint = null;
 			setFocused(null);
 			ModuleManager.save();
@@ -1006,7 +1007,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 				setFocused(null);
 				return true;
 			}
-			if (e.key() == 257 || e.key() == 335) {
+			if (e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_NUMPADENTER) {
 				commitWorldRename();
 				return true;
 			}

@@ -18,7 +18,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -47,7 +47,7 @@ public class ShulkerTooltipModule extends HudModule {
 	public ShulkerTooltipModule() {
 		super("shulkertooltip", "Shulker Tooltip");
 		instance = this;
-		lockKey = new HoldableKey("key.clientify.lock_tooltip", GLFW.GLFW_KEY_LEFT_CONTROL,
+		lockKey = new HoldableKey("key.clientify.lock_tooltip", InputConstants.KEY_LCONTROL,
 				ClientifyClient.KEY_CATEGORY);
 		KeyBindingHelper.registerKeyBinding(lockKey); // returns the base type, so keep our own reference
 		TooltipComponentCallback.EVENT.register(data ->
