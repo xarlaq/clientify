@@ -496,7 +496,7 @@ public class TotemModule extends HudModule {
 				g.pose().pushMatrix();
 				g.pose().translate(x, y);
 				g.pose().scale(COUNTER_ICON / 16f * scale, COUNTER_ICON / 16f * scale);
-				g.item(TOTEM, 0, 0);
+				g.item(totem(), 0, 0);
 				g.pose().popMatrix();
 				x += (COUNTER_ICON + COUNTER_GAP) * scale;
 			}
@@ -520,10 +520,23 @@ public class TotemModule extends HudModule {
 
 	// ---- the editor box ----
 
-	/** Below this the box is more of a dot than a handle, and there is no scrolling back up. */
 	/** Shared: renderItem only reads it, and one per line per frame was one too many. */
-	private static final ItemStack TOTEM = new ItemStack(Items.TOTEM_OF_UNDYING);
+	private static ItemStack totem;
 
+	/**
+	 * Made on first draw rather than with the class. 26.x binds item components after mods
+	 * initialise, and an ItemStack made before that throws - which, from a static field, took the
+	 * whole client down at startup. Only ever touched from the render thread.
+	 */
+	private static ItemStack totem() {
+		ItemStack stack = totem;
+		if (stack == null) {
+			totem = stack = new ItemStack(Items.TOTEM_OF_UNDYING);
+		}
+		return stack;
+	}
+
+	/** Below this the box is more of a dot than a handle, and there is no scrolling back up. */
 	private static final float SMALLEST_BOX = 24f;
 
 	/**
@@ -618,7 +631,7 @@ public class TotemModule extends HudModule {
 		graphics.pose().pushMatrix();
 		graphics.pose().translate(r.x() + r.w() / 2f, r.y() + r.h() / 2f);
 		graphics.pose().scale(r.w() / 16f, r.h() / 16f);
-		graphics.item(TOTEM, -8, -8);
+		graphics.item(totem(), -8, -8);
 		graphics.pose().popMatrix();
 	}
 
