@@ -33,13 +33,13 @@ public class PictureInPictureRendererMixin {
 	// Everything below runs inside prepare, blitTexture included, so one lookup covers the lot.
 	@Inject(method = "prepare", at = @At("HEAD"))
 	private void clientify$beginPicture(PictureInPictureRenderState state, GuiRenderState guiRenderState,
-			int guiScale, CallbackInfo ci) {
+			net.minecraft.client.renderer.feature.FeatureRenderDispatcher featureRenderDispatcher, int guiScale, CallbackInfo ci) {
 		GuiScaleModule.beginPictureInPicture(state);
 	}
 
 	@Inject(method = "prepare", at = @At("RETURN"))
 	private void clientify$endPicture(PictureInPictureRenderState state, GuiRenderState guiRenderState,
-			int guiScale, CallbackInfo ci) {
+			net.minecraft.client.renderer.feature.FeatureRenderDispatcher featureRenderDispatcher, int guiScale, CallbackInfo ci) {
 		GuiScaleModule.endPictureInPicture();
 	}
 

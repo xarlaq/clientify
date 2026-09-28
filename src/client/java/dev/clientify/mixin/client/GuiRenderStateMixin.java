@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(GuiRenderState.class)
 public class GuiRenderStateMixin {
-	@Inject(method = "submitPicturesInPictureState", at = @At("HEAD"))
+	@Inject(method = "addPicturesInPictureState", at = @At("HEAD"))
 	private void clientify$tagPicture(PictureInPictureRenderState state, CallbackInfo ci) {
 		GuiScaleModule.tagPictureInPicture(state);
 	}

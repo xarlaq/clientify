@@ -46,7 +46,7 @@ public abstract class PlayerTabOverlayMixin {
 	 * flag stayed set, the next frame pushed again on top of it. The finally closes both whatever
 	 * happens.
 	 */
-	@WrapMethod(method = "render")
+	@WrapMethod(method = "extractRenderState")
 	private void clientify$tabList(GuiGraphicsExtractor g, int width, Scoreboard scoreboard,
 			@Nullable Objective objective, Operation<Void> original) {
 		TabModule.Settings s = TabModule.active();
@@ -76,23 +76,23 @@ public abstract class PlayerTabOverlayMixin {
 		}
 	}
 
-	@ModifyExpressionValue(method = "render",
+	@ModifyExpressionValue(method = "extractRenderState",
 			at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;header:Lnet/minecraft/network/chat/Component;"))
 	private Component clientify$hideHeader(Component original) {
 		TabModule.Settings s = TabModule.active();
 		return s != null && s.hideHeader ? null : original;
 	}
 
-	@ModifyExpressionValue(method = "render",
+	@ModifyExpressionValue(method = "extractRenderState",
 			at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;footer:Lnet/minecraft/network/chat/Component;"))
 	private Component clientify$hideFooter(Component original) {
 		TabModule.Settings s = TabModule.active();
 		return s != null && s.hideFooter ? null : original;
 	}
 
-	@WrapOperation(method = "render",
+	@WrapOperation(method = "extractRenderState",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
+					target = "Lnet/minecraft/client/gui/components/PlayerFaceExtractor;extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
 	private void clientify$hideHeads(GuiGraphicsExtractor g, Identifier skin, int x, int y, int size,
 			boolean hat, boolean upsideDown, int tint, Operation<Void> original) {
 		TabModule.Settings s = TabModule.active();
@@ -102,7 +102,7 @@ public abstract class PlayerTabOverlayMixin {
 	}
 
 	/** Recolors the tab list's own fills: panel background vs per-player row strips. */
-	@WrapOperation(method = "render",
+	@WrapOperation(method = "extractRenderState",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"))
 	private void clientify$tabFills(GuiGraphicsExtractor g, int x0, int y0, int x1, int y1, int color,
 			Operation<Void> original) {
@@ -111,7 +111,7 @@ public abstract class PlayerTabOverlayMixin {
 		}
 	}
 
-	@Inject(method = "renderPingIcon", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractPingIcon", at = @At("HEAD"), cancellable = true)
 	private void clientify$pingTweaks(GuiGraphicsExtractor g, int cellWidth, int x, int y, PlayerInfo info,
 			CallbackInfo ci) {
 		TabModule.Settings s = TabModule.active();
