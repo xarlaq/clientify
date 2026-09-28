@@ -78,8 +78,6 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 25
-	// PORTING: show every error, not the first 100. Remove once the port compiles.
-	it.options.compilerArgs += ["-Xmaxerrs", "5000"]
 }
 
 java {
