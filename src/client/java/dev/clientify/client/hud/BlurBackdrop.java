@@ -179,7 +179,7 @@ public final class BlurBackdrop {
 			return;
 		}
 		wanted = false;
-		RenderTarget main = mc.getMainRenderTarget();
+		RenderTarget main = mc.gameRenderer.mainRenderTarget();
 		PostChain chain = mc.getShaderManager().getPostChain(BLUR_CHAIN, LevelTargetBundle.MAIN_TARGETS);
 		if (main == null || main.getColorTexture() == null || chain == null) {
 			return;
