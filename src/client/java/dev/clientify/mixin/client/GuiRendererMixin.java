@@ -1,11 +1,15 @@
 package dev.clientify.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import dev.clientify.client.hud.BlurBackdrop;
 import dev.clientify.client.modules.GuiScaleModule;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.GuiRenderer;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Keeps items sharp in a screen the interface-scale module draws larger than the window's GUI
@@ -27,5 +31,19 @@ public class GuiRendererMixin {
 					target = "Lnet/minecraft/client/renderer/state/WindowRenderState;guiScale:I"))
 	private int clientify$itemAtlasScale(int windowScale) {
 		return GuiScaleModule.itemAtlasScale(windowScale);
+	}
+
+	/**
+	 * Makes the blurred backdrop for menu and module blur, at the one moment it can be made right.
+	 *
+	 * <p>The GUI renderer has just drawn the title panorama, if there is one, and is about to draw
+	 * the GUI: the main target holds the world or the panorama and nothing else. On 26.x the GUI
+	 * is built before the world is even drawn, so this is where BlurBackdrop.prepare's request is
+	 * carried out - see BlurBackdrop.capture.
+	 */
+	@Inject(method = "render",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/render/GuiRenderer;prepare()V"))
+	private void clientify$captureBlurBackdrop(CallbackInfo ci) {
+		BlurBackdrop.capture(Minecraft.getInstance());
 	}
 }
