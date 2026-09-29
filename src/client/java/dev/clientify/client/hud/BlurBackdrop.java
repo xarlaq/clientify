@@ -43,6 +43,11 @@ public final class BlurBackdrop {
 	private static boolean captured;
 	private static boolean available;
 	/**
+	 * Something asked for the backdrop while this frame's GUI was being built, and the copy that
+	 * fills it is still to be made - by {@link #capture}, once the world is drawn.
+	 */
+	private static boolean wanted;
+	/**
 	 * What has already been said about the blur, so a per-frame condition is reported once instead
 	 * of every frame. Chip blur failing is silent by design — the chip just draws flat — which is
 	 * fine for the player and useless for working out why.
@@ -123,9 +128,19 @@ public final class BlurBackdrop {
 		return Math.max(1, Math.min(10, v));
 	}
 
-	/** Captures + blurs the world once per frame. False = use the flat fallback. */
+	/**
+	 * Asks for the blurred backdrop this frame and says whether it can be had. False = use the flat
+	 * fallback.
+	 *
+	 * <p>Called while the GUI is being built, which on 26.x is before the world is drawn: a frame
+	 * goes update, extract, render. A copy made here would be last frame's finished picture, panel
+	 * and all, and blurring that into itself frame after frame turns a menu panel flat grey. So
+	 * nothing is copied here; {@link #capture} does it at render time, from the same picture
+	 * 1.21.11 copied - the world, or the title panorama, with no GUI on it yet.
+	 */
 	public static boolean prepare(Minecraft mc) {
 		if (captured) {
+			wanted |= available;
 			return available;
 		}
 		captured = true;
@@ -144,12 +159,31 @@ public final class BlurBackdrop {
 			say("no main render target to copy from — chips will draw flat");
 			return false;
 		}
-		PostChain chain = mc.getShaderManager().getPostChain(BLUR_CHAIN, LevelTargetBundle.MAIN_TARGETS);
-		if (chain == null) {
+		if (mc.getShaderManager().getPostChain(BLUR_CHAIN, LevelTargetBundle.MAIN_TARGETS) == null) {
 			say("this renderer has no minecraft:blur post chain — chips will draw flat");
 			return false;
 		}
+		// Made now, so the texture the GUI is about to be built against exists this frame.
+		ensureTarget(mc, main.width, main.height);
+		available = true;
+		wanted = true;
+		return true;
+	}
 
+	/**
+	 * Copies and blurs the backdrop, if anything asked for it this frame. GuiRendererMixin calls this
+	 * as the GUI renderer starts: the world (or the title panorama) is drawn and no GUI is yet.
+	 */
+	public static void capture(Minecraft mc) {
+		if (!wanted) {
+			return;
+		}
+		wanted = false;
+		RenderTarget main = mc.getMainRenderTarget();
+		PostChain chain = mc.getShaderManager().getPostChain(BLUR_CHAIN, LevelTargetBundle.MAIN_TARGETS);
+		if (main == null || main.getColorTexture() == null || chain == null) {
+			return;
+		}
 		try {
 			ensureTarget(mc, main.width, main.height);
 			RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(
@@ -157,11 +191,11 @@ public final class BlurBackdrop {
 			chain.process(target, pool);
 			pool.endFrame();
 		} catch (Throwable t) {
-			// Swallowed rather than allowed to kill the HUD: a chip without its blur is a cosmetic
+			// Swallowed rather than allowed to kill the GUI: a chip without its blur is a cosmetic
 			// loss, and a throw out of here takes every module on screen with it.
 			say("the blur pass failed on this renderer (" + t.getClass().getSimpleName()
 					+ ": " + t.getMessage() + ") — chips will draw flat");
-			return false;
+			return;
 		}
 
 		// The radius is not passed to process() — vanilla does not pass one either. It rides the
@@ -171,8 +205,6 @@ public final class BlurBackdrop {
 		Integer radius = blurOverride();
 		say("blur ready at " + main.width + "x" + main.height + ", vFlip=" + V_FLIP
 				+ ", radius=" + (radius == null ? "vanilla's own" : radius));
-		available = true;
-		return true;
 	}
 
 	/** Says something about the blur once, and only when it is not what was said last. */
