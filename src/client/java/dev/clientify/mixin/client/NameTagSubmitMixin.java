@@ -90,20 +90,12 @@ public abstract class NameTagSubmitMixin {
 	}
 
 	/**
-	 * Submits one nametag line, with a drop shadow under it when the module asks for one.
-	 *
-	 * <p>The nametag submit has no shadow of its own — vanilla prepares its text with the shadow off
-	 * — so it is a second submission of the same text, a pixel across and down, at vanilla's own
-	 * shadow colour (a quarter brightness, same alpha) and carrying no plate of its own. It goes in
-	 * first so it lands behind: both phases keep submission order for submits at one distance.
+	 * Submits one nametag line. The text shadow, when the module wants one, is the font's own -
+	 * see NameTagFeatureRendererMixin - so nothing extra is submitted for it here.
 	 */
 	@Unique
 	private static void clientify$tag(Consumer<NameTagFeatureRenderer.Submit> into, Matrix4f pose, float x,
 			float y, Component text, int light, int color, int plate, Font.DisplayMode mode) {
-		if (NametagsModule.textShadow()) {
-			int shadow = ((color & 0xFCFCFC) >> 2) | (color & 0xFF000000);
-			into.accept(new NameTagFeatureRenderer.Submit(pose, x + 1f, y + 1f, text, light, shadow, 0, mode));
-		}
 		into.accept(new NameTagFeatureRenderer.Submit(pose, x, y, text, light, color, plate, mode));
 	}
 }

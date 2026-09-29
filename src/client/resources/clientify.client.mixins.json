@@ -38,6 +38,7 @@
 		"ItemStackMixin",
 		"LightmapExtractorMixin",
 		"MouseHandlerMixin",
+		"NameTagFeatureRendererMixin",
 		"NameTagSubmitMixin",
 		"OptionsMixin",
 		"OverlayTextureMixin",

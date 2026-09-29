@@ -109,7 +109,7 @@ public class NametagsModule extends FeatureModule {
 		return (vanilla & 0xFF000000) | (s.tagTextColor.chrome() & 0xFFFFFF);
 	}
 
-	/** NameTagSubmitMixin: true to lay a drop shadow under the name. */
+	/** NameTagFeatureRendererMixin: true to have the font draw the tag text with its shadow. */
 	public static boolean textShadow() {
 		Settings s = active();
 		return s != null && s.tagShadow;
