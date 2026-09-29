@@ -822,6 +822,16 @@ public abstract class SettingsRowsScreen extends PanelScreen {
 	 */
 	@Override
 	protected boolean captureRawMouse(MouseButtonEvent e) {
+		// A keybind row takes mouse buttons too, side buttons included - exactly as Minecraft's
+		// own Controls screen does it. Without this the click fell through to the row itself and a
+		// side button could only be bound from the Controls screen.
+		if (listeningKey != null) {
+			listeningKey.setKey(com.mojang.blaze3d.platform.InputConstants.Type.MOUSE.getOrCreate(e.button()));
+			KeyMapping.resetMapping();
+			Minecraft.getInstance().options.save();
+			listeningKey = null;
+			return true;
+		}
 		if (listeningRaw == null) {
 			return false;
 		}
