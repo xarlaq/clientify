@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -761,6 +761,6 @@ public class OverlayModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 }

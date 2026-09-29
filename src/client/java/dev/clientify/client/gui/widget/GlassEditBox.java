@@ -5,7 +5,7 @@ import dev.clientify.client.gui.Textures;
 import dev.clientify.client.gui.Ui;
 import dev.clientify.client.util.Draw;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -62,7 +62,7 @@ public class GlassEditBox extends EditBox {
 	}
 
 	@Override
-	public void renderWidget(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	public void extractWidgetRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		int off = searchIcon ? 17 : 5;
 		int cx = getX() - off;
 		int cy = getY() - (cardH - 8) / 2;
@@ -76,6 +76,6 @@ public class GlassEditBox extends EditBox {
 		if (!placeholder.isEmpty() && getValue().isEmpty() && !isFocused()) {
 			Ui.str(g, placeholder, getX(), cy + (cardH - 9) / 2 + 1, Ui.TEXT_DIM);
 		}
-		super.renderWidget(g, mouseX, mouseY, partialTick);
+		super.extractWidgetRenderState(g, mouseX, mouseY, partialTick);
 	}
 }

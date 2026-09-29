@@ -9,7 +9,7 @@ import dev.clientify.client.hud.ModuleManager;
 import dev.clientify.client.util.Colors;
 import dev.clientify.client.util.Draw;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -66,7 +66,7 @@ public abstract class PanelScreen extends Screen {
 	protected abstract void initMain();
 
 	/** Main-area background content; runs at the end of {@link #renderBackground}. */
-	protected abstract void renderMain(GuiGraphics g, int mouseX, int mouseY, float partialTick);
+	protected abstract void renderMain(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick);
 
 	/** Clicks the common chrome didn't consume. */
 	protected boolean mainClicked(MouseButtonEvent e) {
@@ -101,8 +101,8 @@ public abstract class PanelScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-		super.render(g, mouseX, mouseY, partialTick);
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+		super.extractRenderState(g, mouseX, mouseY, partialTick);
 		if (tooltip != null) {
 			// Split on newlines: a tooltip that has to explain something rarely fits on one line,
 			// and one long line would run off the edge of the screen instead of wrapping.
@@ -159,12 +159,12 @@ public abstract class PanelScreen extends Screen {
 	// ---- rendering ----
 
 	@Override
-	public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		// Outside a world there is no world to show through the panel, so vanilla's title panorama
 		// stands in behind it. It also has to be drawn before the blur capture, since that samples
 		// whatever is already on the screen.
 		if (minecraft.level == null) {
-			renderPanorama(g, partialTick);
+			extractPanorama(g, partialTick);
 			// The HUD is what normally marks a new frame for the backdrop, and it is not running.
 			dev.clientify.client.hud.BlurBackdrop.newFrame();
 		}
@@ -337,11 +337,11 @@ public abstract class PanelScreen extends Screen {
 	}
 
 	/** Draws the custom sidebar rows inside (x, y, w) clipped to {@code bottom}. */
-	protected void renderCustomSidebar(GuiGraphics g, int mouseX, int mouseY, int x, int y, int w, int bottom) {
+	protected void renderCustomSidebar(GuiGraphicsExtractor g, int mouseX, int mouseY, int x, int y, int w, int bottom) {
 	}
 
 	/** Draws the custom sidebar's footer button in the + NEW PROFILE slot. */
-	protected void renderCustomSidebarFooter(GuiGraphics g, int mouseX, int mouseY, Rect slot) {
+	protected void renderCustomSidebarFooter(GuiGraphicsExtractor g, int mouseX, int mouseY, Rect slot) {
 	}
 
 	/** Handles a click in the custom sidebar (including its footer slot). */

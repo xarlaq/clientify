@@ -15,7 +15,7 @@ import dev.clientify.client.util.Draw;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -128,11 +128,11 @@ public class HudEditorScreen extends Screen {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		// No blur and no dim in the editor — the raw world stays visible while editing. With no
 		// world to show, vanilla's title panorama stands in (nothing else would clear the screen).
 		if (minecraft.level == null) {
-			renderPanorama(g, partialTick);
+			extractPanorama(g, partialTick);
 		}
 		DeltaTracker dt = minecraft.getDeltaTracker();
 		// A pass of its own: the HUD pass behind this screen already claimed its rects and cached
@@ -180,8 +180,8 @@ public class HudEditorScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-		super.render(g, mouseX, mouseY, partialTick);
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+		super.extractRenderState(g, mouseX, mouseY, partialTick);
 		// Above the buttons and over the top of everything, like the buttons themselves.
 		Logo.draw(g, logoX, logoY, LOGO);
 		String hint = "Drag to move  ·  Scroll to resize  ·  Arrows to nudge";

@@ -36,7 +36,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public final class ModuleManager {
 	private static final Map<String, HudModule> MODULES = new LinkedHashMap<>();
@@ -119,7 +119,7 @@ public final class ModuleManager {
 		return MODULES.values();
 	}
 
-	private static void renderHud(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	private static void renderHud(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 		// Also starts a pass here, not only in frame_start: the HUD can be hidden (F1) in ways
 		// that skip that element, and a token that never advances would freeze cached content.
 		HudFrame.begin();

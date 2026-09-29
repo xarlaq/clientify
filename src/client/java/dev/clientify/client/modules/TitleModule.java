@@ -10,7 +10,7 @@ import dev.clientify.client.hud.HudText;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -166,7 +166,7 @@ public class TitleModule extends HudModule {
 	}
 
 	/** Called by GuiTitleMixin in place of vanilla title rendering. */
-	public void renderTitle(GuiGraphics g, Component title, Component subtitle, int alpha) {
+	public void renderTitle(GuiGraphicsExtractor g, Component title, Component subtitle, int alpha) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		currentTitle = title;
@@ -190,7 +190,7 @@ public class TitleModule extends HudModule {
 	 * One centered line at an extra font multiplier. The server's own colors win; anything it
 	 * left uncolored takes our ColorSpec (per character, so gradients/waves still work).
 	 */
-	private void drawLine(GuiGraphics g, Minecraft mc, Settings s, Component text, Rect r, float y,
+	private void drawLine(GuiGraphicsExtractor g, Minecraft mc, Settings s, Component text, Rect r, float y,
 			float extra, ColorSpec spec, int alpha) {
 		float scale = s.scale * extra;
 		float w = HudText.width(mc, s, text, scale);
@@ -201,7 +201,7 @@ public class TitleModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		if (mc.screen instanceof HudEditorScreen && currentTitle == null && s.editorPreview) {

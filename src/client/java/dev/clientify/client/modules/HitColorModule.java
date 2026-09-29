@@ -10,7 +10,7 @@ import dev.clientify.client.util.HurtColorAccess;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * hitcolor+-style custom damage flash: rewrites the hurt rows of the entity overlay texture
@@ -104,7 +104,7 @@ public class HitColorModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 
 	// ---- armor flash plumbing (called from the armor-layer mixins) ----

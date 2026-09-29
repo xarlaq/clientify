@@ -4,7 +4,7 @@ import dev.clientify.client.config.ModuleSettings;
 import dev.clientify.client.config.ModuleSettings.ColorSpec;
 import dev.clientify.client.gui.MenuFont;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Draws HUD text in SCREEN space, honoring a module's font (Clientify atlas or vanilla) and
@@ -75,12 +75,12 @@ public final class HudText {
 	 * draws the whole string in one call, so the drop shadow renders exactly like vanilla's
 	 * (per-character drawing gives each glyph its own shadow pass, which reads wrong).
 	 */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y, int color) {
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y, int color) {
 		draw(g, mc, s, text, x, y, color, s.scale);
 	}
 
 	/** Flat-colored draw at an explicit scale. */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y,
 			int color, float scale) {
 		if (text.isEmpty()) {
 			return;
@@ -93,7 +93,7 @@ public final class HudText {
 			g.pose().pushMatrix();
 			g.pose().translate(x, y);
 			g.pose().scale(scale, scale);
-			g.drawString(mc.font, text, 0, 0, color, s.textShadow);
+			g.text(mc.font, text, 0, 0, color, s.textShadow);
 			g.pose().popMatrix();
 			return;
 		}
@@ -104,13 +104,13 @@ public final class HudText {
 	 * Draws {@code text} at screen (x,y), coloring character {@code i} of the whole string via
 	 * {@code spec} across [0, total) (so a wave spans the whole run).
 	 */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y,
 			ColorSpec spec, int charBase, int total) {
 		draw(g, mc, s, text, x, y, i -> spec.argbAt(charBase + i, total), text.length(), s.scale);
 	}
 
 	/** Per-character spec draw at an explicit scale. */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y,
 			ColorSpec spec, int charBase, int total, float scale) {
 		draw(g, mc, s, text, x, y, i -> spec.argbAt(charBase + i, total), text.length(), scale);
 	}
@@ -162,14 +162,14 @@ public final class HudText {
 	 * Draws a Component preserving the server's per-character colors. {@code override}, when
 	 * non-null, replaces the color of characters the server did NOT color itself.
 	 */
-	public static void drawComponent(GuiGraphics g, Minecraft mc, ModuleSettings s,
+	public static void drawComponent(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s,
 			net.minecraft.network.chat.Component text, float x, float y, int defaultColor,
 			java.util.function.IntUnaryOperator override) {
 		drawComponent(g, mc, s, text, x, y, defaultColor, override, s.scale);
 	}
 
 	/** Component draw preserving server colors, at an explicit scale. */
-	public static void drawComponent(GuiGraphics g, Minecraft mc, ModuleSettings s,
+	public static void drawComponent(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s,
 			net.minecraft.network.chat.Component text, float x, float y, int defaultColor,
 			java.util.function.IntUnaryOperator override, float scale) {
 		Styled st = styled(text, defaultColor);
@@ -185,7 +185,7 @@ public final class HudText {
 			g.pose().translate(x, y);
 			g.pose().scale(scale, scale);
 			int base = override != null ? override.applyAsInt(0) : defaultColor;
-			g.drawString(mc.font, text, 0, 0, base, s.textShadow);
+			g.text(mc.font, text, 0, 0, base, s.textShadow);
 			g.pose().popMatrix();
 			return;
 		}
@@ -215,13 +215,13 @@ public final class HudText {
 	}
 
 	/** Draws {@code text}, coloring by an arbitrary index→ARGB function (length = text.length()). */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y,
 			java.util.function.IntUnaryOperator colorByIndex, int ignoredLen) {
 		draw(g, mc, s, text, x, y, colorByIndex, ignoredLen, s.scale);
 	}
 
 	/** Index→ARGB draw at an explicit scale. */
-	public static void draw(GuiGraphics g, Minecraft mc, ModuleSettings s, String text, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, String text, float x, float y,
 			java.util.function.IntUnaryOperator colorByIndex, int ignoredLen, float scale) {
 		if (text.isEmpty()) {
 			return;
@@ -243,12 +243,12 @@ public final class HudText {
 				// One colour the whole way along, which is what a static colour means and what
 				// most text is. Vanilla draws the string in one go, so it measures and shadows it
 				// as one rather than a character at a time.
-				g.drawString(mc.font, text, 0, 0, first, s.textShadow);
+				g.text(mc.font, text, 0, 0, first, s.textShadow);
 			} else {
 				int lx = 0;
 				for (int i = 0; i < text.length(); i++) {
 					String ch = String.valueOf(text.charAt(i));
-					g.drawString(mc.font, ch, lx, 0, colorByIndex.applyAsInt(i), s.textShadow);
+					g.text(mc.font, ch, lx, 0, colorByIndex.applyAsInt(i), s.textShadow);
 					lx += mc.font.width(ch);
 				}
 			}

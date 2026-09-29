@@ -189,7 +189,7 @@ public final class Textures {
 		float x = (SIZE - glyphW) / 2f;
 		float y = (SIZE - (fm.getAscent() + fm.getDescent())) / 2f + fm.getAscent();
 		g.setColor(java.awt.Color.WHITE);
-		g.drawString(String.valueOf(codepoint), x, y);
+		g.text(String.valueOf(codepoint), x, y);
 		g.dispose();
 
 		NativeImage img = new NativeImage(SIZE, SIZE, false);

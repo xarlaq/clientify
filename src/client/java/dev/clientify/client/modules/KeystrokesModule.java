@@ -14,7 +14,7 @@ import java.util.Map;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 /**
@@ -700,7 +700,7 @@ public class KeystrokesModule extends HudModule {
 	 * <p>Scissored to the key: a ring is a thing happening on that key, and letting one sail across
 	 * its neighbours turns a row of taps into a mess.
 	 */
-	private void drawRings(GuiGraphics g, Chip chip, int x, int y, int w, int h, int radius,
+	private void drawRings(GuiGraphicsExtractor g, Chip chip, int x, int y, int w, int h, int radius,
 			int color, float unit) {
 		Press p = presses.get(chip.id());
 		if (p == null || p.rings.isEmpty()) {
@@ -882,7 +882,7 @@ public class KeystrokesModule extends HudModule {
 	// ---- render ----
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = s();
 		sampleClicks(mc);
@@ -912,7 +912,7 @@ public class KeystrokesModule extends HudModule {
 	}
 
 
-	private void drawChip(GuiGraphics g, Minecraft mc, Settings s, Chip chip, int x, int y, int w, int h) {
+	private void drawChip(GuiGraphicsExtractor g, Minecraft mc, Settings s, Chip chip, int x, int y, int w, int h) {
 		Look look = chip.look();
 		float t = pressT(chip.id());
 		// A key drawn twice its size wants its text and its corners twice the size too, so both are
@@ -1007,7 +1007,7 @@ public class KeystrokesModule extends HudModule {
 	 * <p>Centred on the ink rather than on the line box: a font's line height carries slack under
 	 * the baseline for descenders, and centring against that sits every label a pixel high.
 	 */
-	private void drawLabel(GuiGraphics g, Minecraft mc, Settings s, Chip chip, int x, int y, int w,
+	private void drawLabel(GuiGraphicsExtractor g, Minecraft mc, Settings s, Chip chip, int x, int y, int w,
 			int h, int fg, float unit) {
 		String label = chip.label();
 		unit = fitted(mc, s, label, w, unit);

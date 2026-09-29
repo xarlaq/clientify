@@ -6,7 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -27,7 +27,7 @@ public class ClientifyClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		KEY_CATEGORY = KeyMapping.Category.register(id("clientify"));
-		menuKey = KeyBindingHelper.registerKeyBinding(
+		menuKey = KeyMappingHelper.registerKeyMapping(
 				new KeyMapping("key.clientify.menu", InputConstants.KEY_RSHIFT, KEY_CATEGORY));
 
 		ModuleManager.init();

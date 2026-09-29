@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.Identifier;
@@ -133,7 +133,7 @@ public class GuiScaleModule extends HudModule {
 	 * Scales about the bottom centre of the screen, the point the whole cluster is arranged
 	 * around, so it grows and shrinks in place instead of drifting off a corner. The caller pops.
 	 */
-	public static void pushHotbarScale(GuiGraphics g) {
+	public static void pushHotbarScale(GuiGraphicsExtractor g) {
 		float scale = hotbarScale();
 		float cx = g.guiWidth() / 2f;
 		float cy = g.guiHeight();
@@ -410,6 +410,6 @@ public class GuiScaleModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 }

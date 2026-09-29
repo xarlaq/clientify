@@ -3,7 +3,7 @@ package dev.clientify.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import dev.clientify.client.modules.GuiScaleModule;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -56,7 +56,7 @@ public class ScreenMixin {
 	 * was drawing scaled for good. The finally puts that beyond reach of a cancel or a throw.
 	 */
 	@WrapMethod(method = "renderWithTooltipAndSubtitles")
-	private void clientify$scaleScreen(GuiGraphics guiGraphics, int mouseX, int mouseY,
+	private void clientify$scaleScreen(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY,
 			float partialTick, Operation<Void> original) {
 		float scale = GuiScaleModule.beginScreenDraw((Screen) (Object) this);
 		boolean pushed = scale != 1f;

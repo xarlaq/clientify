@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -164,7 +164,7 @@ public final class MenuFont {
 			int cx = (i % COLS) * cellW;
 			int cy = (i / COLS) * fullH;
 			int w = Math.max(1, fm.charWidth(c));
-			g.drawString(String.valueOf(c), cx + PAD, cy + PAD + ascent);
+			g.text(String.valueOf(c), cx + PAD, cy + PAD + ascent);
 			set.glyphs.put(c, new Glyph(cx + PAD, cy + PAD, w, cellH, w));
 		}
 		g.dispose();
@@ -222,31 +222,31 @@ public final class MenuFont {
 		return Math.round((float) w / scale);
 	}
 
-	public static void draw(GuiGraphics g, String s, float x, float y, int color) {
+	public static void draw(GuiGraphicsExtractor g, String s, float x, float y, int color) {
 		draw(g, s, x, y, color, Size.BODY.ascentGui, false, 0f);
 	}
 
-	public static void draw(GuiGraphics g, String s, float x, float y, int color, Size size, boolean shadow) {
+	public static void draw(GuiGraphicsExtractor g, String s, float x, float y, int color, Size size, boolean shadow) {
 		draw(g, s, x, y, color, size.ascentGui, shadow, 0f);
 	}
 
-	public static void draw(GuiGraphics g, String s, float x, float y, int color, Size size, boolean shadow,
+	public static void draw(GuiGraphicsExtractor g, String s, float x, float y, int color, Size size, boolean shadow,
 			float tracking) {
 		draw(g, s, x, y, color, size.ascentGui, shadow, tracking);
 	}
 
 	/** Draws at an arbitrary on-screen ascent (GUI px) — used by scaled HUD chips. */
-	public static void draw(GuiGraphics g, String s, float x, float y, int color, float ascentGui, boolean shadow,
+	public static void draw(GuiGraphicsExtractor g, String s, float x, float y, int color, float ascentGui, boolean shadow,
 			float tracking) {
 		draw(g, s, x, y, i -> color, ascentGui, shadow, tracking);
 	}
 
 	/** Per-character colors ({@code colorByIndex} maps char index → ARGB) for text effects. */
-	public static void draw(GuiGraphics g, String s, float x, float y,
+	public static void draw(GuiGraphicsExtractor g, String s, float x, float y,
 			java.util.function.IntUnaryOperator colorByIndex, float ascentGui, boolean shadow, float tracking) {
 		GlyphSet set = ensure(ascentGui);
 		if (set == null) {
-			g.drawString(Minecraft.getInstance().font, s, Math.round(x), Math.round(y),
+			g.text(Minecraft.getInstance().font, s, Math.round(x), Math.round(y),
 					colorByIndex.applyAsInt(0), shadow);
 			return;
 		}
@@ -270,7 +270,7 @@ public final class MenuFont {
 	}
 
 	/** Draws at PHYSICAL pixel coords; caller has already scaled the pose by 1/guiScale. */
-	private static void drawGlyphs(GuiGraphics g, GlyphSet set, String s, int px, int py,
+	private static void drawGlyphs(GuiGraphicsExtractor g, GlyphSet set, String s, int px, int py,
 			java.util.function.IntUnaryOperator colorByIndex, int trackPx) {
 		int penX = px;
 		for (int i = 0; i < s.length(); i++) {

@@ -7,7 +7,7 @@ import dev.clientify.client.hud.HudModule;
 import dev.clientify.client.modules.BossBarModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.BossEvent;
@@ -34,7 +34,7 @@ public abstract class BossHealthOverlayMixin {
 	 * top of it, once per frame, without end. The finally cannot be skipped.
 	 */
 	@WrapMethod(method = "render")
-	private void clientify$bossBars(GuiGraphics g, Operation<Void> original) {
+	private void clientify$bossBars(GuiGraphicsExtractor g, Operation<Void> original) {
 		clientify$barIndex = 0;
 		BossBarModule.Settings s = BossBarModule.active();
 		if (s == null) {
@@ -66,8 +66,8 @@ public abstract class BossHealthOverlayMixin {
 
 	@WrapOperation(method = "render",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;drawBar(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/world/BossEvent;)V"))
-	private void clientify$limitBars(BossHealthOverlay self, GuiGraphics g, int x, int y, BossEvent event,
+					target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;drawBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;)V"))
+	private void clientify$limitBars(BossHealthOverlay self, GuiGraphicsExtractor g, int x, int y, BossEvent event,
 			Operation<Void> original) {
 		if (!BossBarModule.overLimit(clientify$barIndex) && !BossBarModule.hideBar()) {
 			original.call(self, g, x, y, event);
@@ -76,10 +76,10 @@ public abstract class BossHealthOverlayMixin {
 	}
 
 	/** Recolors the bar sprites by swapping in the tinted blitSprite overload. */
-	@WrapOperation(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/world/BossEvent;I[Lnet/minecraft/resources/Identifier;[Lnet/minecraft/resources/Identifier;)V",
+	@WrapOperation(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;I[Lnet/minecraft/resources/Identifier;[Lnet/minecraft/resources/Identifier;)V",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIII)V"))
-	private void clientify$barColor(GuiGraphics g, com.mojang.blaze3d.pipeline.RenderPipeline pipeline,
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIII)V"))
+	private void clientify$barColor(GuiGraphicsExtractor g, com.mojang.blaze3d.pipeline.RenderPipeline pipeline,
 			net.minecraft.resources.Identifier sprite, int texW, int texH, int u, int v, int x, int y,
 			int w, int h, Operation<Void> original) {
 		int tint = BossBarModule.barTint();
@@ -92,8 +92,8 @@ public abstract class BossHealthOverlayMixin {
 
 	@WrapOperation(method = "render",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
-	private void clientify$barName(GuiGraphics g, Font font, Component text, int x, int y, int color,
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
+	private void clientify$barName(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int color,
 			Operation<Void> original) {
 		if (BossBarModule.hideText() || BossBarModule.overLimit(clientify$barIndex - 1)) {
 			return;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
@@ -221,7 +221,7 @@ public class SaturationModule extends TextHudModule implements Templated {
 	// ---- rendering ----
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		if (pendingBarReposition && mode() == Mode.BAR) {
 			// Park the bar so its icons sit directly above the vanilla hunger icons (right edge
@@ -350,7 +350,7 @@ public class SaturationModule extends TextHudModule implements Templated {
 	}
 
 	/** AppleSkin's overlay: the gold outline frames drawn over the vanilla hunger icons. */
-	private void renderOverlay(GuiGraphics g, Minecraft mc) {
+	private void renderOverlay(GuiGraphicsExtractor g, Minecraft mc) {
 		if (!survivalHud(mc)) {
 			return;
 		}
@@ -372,7 +372,7 @@ public class SaturationModule extends TextHudModule implements Templated {
 	}
 
 	/** A draggable second hunger bar whose fill is the saturation. */
-	private void renderBar(GuiGraphics g, Minecraft mc) {
+	private void renderBar(GuiGraphicsExtractor g, Minecraft mc) {
 		if (!survivalHud(mc)) {
 			return;
 		}

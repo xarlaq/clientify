@@ -175,14 +175,14 @@ public class ItemCounterSettingsScreen extends ModuleSettingsScreen {
 		});
 	}
 
-	private void drawStack(net.minecraft.client.gui.GuiGraphics g, ItemStack stack, int x, int y) {
+	private void drawStack(net.minecraft.client.gui.GuiGraphicsExtractor g, ItemStack stack, int x, int y) {
 		if (stack.isEmpty()) {
 			return;
 		}
 		g.pose().pushMatrix();
 		g.pose().translate(x, y);
 		g.pose().scale(0.9f, 0.9f);
-		g.renderItem(stack, 0, 0);
+		g.item(stack, 0, 0);
 		g.pose().popMatrix();
 	}
 }

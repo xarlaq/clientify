@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -206,7 +206,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 	}
 
 	@Override
-	protected void renderCustomSidebar(GuiGraphics g, int mouseX, int mouseY, int x, int y, int w, int bottom) {
+	protected void renderCustomSidebar(GuiGraphicsExtractor g, int mouseX, int mouseY, int x, int y, int w, int bottom) {
 		List<Entry> rows = entries();
 		for (int slot = 0; slot < rows.size(); slot++) {
 			Entry en = rows.get(slot);
@@ -235,7 +235,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 					g.pose().pushMatrix();
 					g.pose().translate(px + 8, ry + 4);
 					g.pose().scale(0.55f, 0.55f);
-					g.renderItem(WaypointsModule.worldIcon(en.value()), 0, 0);
+					g.item(WaypointsModule.worldIcon(en.value()), 0, 0);
 					g.pose().popMatrix();
 					if (!en.value().equals(renamingWorld)) {
 						boolean armed = en.value().equals(deleteArmedWorld);
@@ -289,7 +289,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 		return 0xFF4E8C3A;
 	}
 
-	private void drawEye(GuiGraphics g, int x, int y, boolean on, boolean hover) {
+	private void drawEye(GuiGraphicsExtractor g, int x, int y, boolean on, boolean hover) {
 		if (!Textures.ensure()) {
 			return;
 		}
@@ -310,7 +310,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 	}
 
 	@Override
-	protected void renderCustomSidebarFooter(GuiGraphics g, int mouseX, int mouseY, Rect slot) {
+	protected void renderCustomSidebarFooter(GuiGraphicsExtractor g, int mouseX, int mouseY, Rect slot) {
 		boolean hover = slot.contains(mouseX, mouseY);
 		boolean clear = worldFilter != null;
 		String label = clear ? "Show All" : "+ New Waypoint";
@@ -517,7 +517,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 				g.pose().pushMatrix();
 				g.pose().translate(mainX + 5, mid - 6);
 				g.pose().scale(0.75f, 0.75f);
-				g.renderItem(icon, 0, 0);
+				g.item(icon, 0, 0);
 				g.pose().popMatrix();
 			} else {
 				g.fill(mainX + 7, mid - 4, mainX + 15, mid + 4, wp.color.chrome());
@@ -651,7 +651,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 			Draw.smoothRounded(g, x, y + 3, 16, 16, 3, overIcon ? 0x33FFFFFF : 0x1AFFFFFF);
 			ItemStack icon = WaypointsModule.iconStack(wp.icon);
 			if (!icon.isEmpty() && !overIcon) {
-				g.renderItem(icon, x, y + 3);
+				g.item(icon, x, y + 3);
 			} else if (Textures.ensure()) {
 				int n = Textures.SIZE;
 				g.blit(RenderPipelines.GUI_TEXTURED, Textures.PENCIL, x + 4, y + 7, 0f, 0f, 8, 8, n, n, n, n,
@@ -733,7 +733,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 		return new Rect(x, y, POPUP_W, POPUP_H);
 	}
 
-	private void renderSharePopup(GuiGraphics g, int mouseX, int mouseY) {
+	private void renderSharePopup(GuiGraphicsExtractor g, int mouseX, int mouseY) {
 		Rect r = sharePopupRect();
 		int x = (int) r.x();
 		int y = (int) r.y();
@@ -801,7 +801,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 	// ---- overlays: icon picker + reset confirmation ----
 
 	@Override
-	protected void renderMain(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	protected void renderMain(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		super.renderMain(g, mouseX, mouseY, partialTick);
 		if (iconPickerOpen || confirmOpen) {
 			// The rows just made their edit boxes visible; widgets draw after us, so they would
@@ -835,7 +835,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 		return new Rect(mainX + 6, py + HEADER_H + 20, mainW - 12, ph - HEADER_H - 50);
 	}
 
-	private void renderIconPicker(GuiGraphics g, int mouseX, int mouseY) {
+	private void renderIconPicker(GuiGraphicsExtractor g, int mouseX, int mouseY) {
 		Rect r = pickerRect();
 		// Same rounded sheet as the menu, lifted a shade so it reads as the top layer.
 		Draw.smoothRoundedBordered(g, (int) r.x(), (int) r.y(), (int) r.w(), (int) r.h(),
@@ -871,7 +871,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 				if (hover) {
 					Draw.smoothRounded(g, (int) r.x() + 6, y, (int) r.w() - 12, 18, 3, 0x22FFFFFF);
 				}
-				g.renderItem(s.stack(), (int) r.x() + 10, y + 1);
+				g.item(s.stack(), (int) r.x() + 10, y + 1);
 				Ui.str(g, s.label(), (int) r.x() + 32, y + 5, hover ? Ui.TEXT : Ui.TEXT_DIM);
 			}
 			y += 18;
@@ -886,7 +886,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 		return new Rect(mainX + 10, py + ph / 2 - 45, mainW - 20, 90);
 	}
 
-	private void renderConfirm(GuiGraphics g, int mouseX, int mouseY) {
+	private void renderConfirm(GuiGraphicsExtractor g, int mouseX, int mouseY) {
 		Rect r = confirmRect();
 		Draw.smoothRoundedBordered(g, (int) r.x(), (int) r.y(), (int) r.w(), (int) r.h(), 6,
 				0xF2101014, Ui.HAIRLINE, 1);
@@ -900,7 +900,7 @@ public class WaypointSettingsScreen extends ModuleSettingsScreen {
 		drawConfirmButton(g, (int) r.x() + 20 + bw * 2, by, bw, "Delete All", 0xB2C43D3D, mouseX, mouseY);
 	}
 
-	private void drawConfirmButton(GuiGraphics g, int x, int y, int w, String label, int color,
+	private void drawConfirmButton(GuiGraphicsExtractor g, int x, int y, int w, String label, int color,
 			int mouseX, int mouseY) {
 		boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + 18;
 		Draw.smoothRounded(g, x, y, w, 18, 4, hover ? brighten(color) : color);

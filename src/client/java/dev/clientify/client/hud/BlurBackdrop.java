@@ -201,7 +201,7 @@ public final class BlurBackdrop {
 		}
 	}
 
-	/** Exposes the target's color texture to GuiGraphics.blit without owning it. */
+	/** Exposes the target's color texture to GuiGraphicsExtractor.blit without owning it. */
 	private static final class WrapTexture extends AbstractTexture {
 		void bind(GpuTexture gpuTexture, GpuTextureView view) {
 			this.texture = gpuTexture;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -203,7 +203,7 @@ public class ModListScreen extends PanelScreen {
 	}
 
 	@Override
-	protected void renderMain(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+	protected void renderMain(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
 		for (int i = 0; i < categories.size(); i++) {
 			HudModule.Rect cr = chipRect(i);
 			boolean active = categories.get(i).equals(activeCategory);
@@ -232,7 +232,7 @@ public class ModListScreen extends PanelScreen {
 	}
 
 	/** Where the carried card would land: its shape in outline, with nothing inside it. */
-	private void drawGap(GuiGraphics g, int x, int y) {
+	private void drawGap(GuiGraphicsExtractor g, int x, int y) {
 		int edge = Ui.accent();
 		// The cards own corner, so the space reads as one of them rather than a box in the grid.
 		int r = 4;
@@ -261,8 +261,8 @@ public class ModListScreen extends PanelScreen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-		super.render(g, mouseX, mouseY, partialTick);
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+		super.extractRenderState(g, mouseX, mouseY, partialTick);
 
 		List<HudModule> mods = filtered();
 		boolean carrying = dragging && pressed != null;
@@ -313,7 +313,7 @@ public class ModListScreen extends PanelScreen {
 		}
 	}
 
-	private void renderCard(GuiGraphics g, HudModule m, int x, int y, int mouseX, int mouseY) {
+	private void renderCard(GuiGraphicsExtractor g, HudModule m, int x, int y, int mouseX, int mouseY) {
 		boolean on = m.isEnabled();
 		boolean inGrid = mouseY >= gridY0 && mouseY <= gridY1;
 		boolean hover = inGrid && mouseX >= x && mouseX < x + cardW && mouseY >= y && mouseY < y + CARD_H;

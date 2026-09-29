@@ -8,7 +8,7 @@ import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * A text HUD chip of one or more LINES built from label/value segments with per-character
@@ -174,7 +174,7 @@ public abstract class TextHudModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics g, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor g, DeltaTracker deltaTracker) {
 		Minecraft mc = Minecraft.getInstance();
 		ModuleSettings s = settings();
 		List<List<Seg>> lines = effectiveLines(mc);
@@ -221,7 +221,7 @@ public abstract class TextHudModule extends HudModule {
 	}
 
 	/** Vanilla-font path: everything drawn in unscaled space under a pose scale. */
-	private void renderVanilla(GuiGraphics g, Minecraft mc, ModuleSettings s, List<List<Seg>> lines, int total) {
+	private void renderVanilla(GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s, List<List<Seg>> lines, int total) {
 		Font font = mc.font;
 		Rect r = bounds(mc, g.guiWidth(), g.guiHeight());
 		g.pose().pushMatrix();
@@ -248,7 +248,7 @@ public abstract class TextHudModule extends HudModule {
 				} else {
 					for (int i = 0; i < text.length(); i++) {
 						String ch = String.valueOf(text.charAt(i));
-						g.drawString(font, ch, x, ty, spec.argbAt(base + i, total), s.textShadow);
+						g.text(font, ch, x, ty, spec.argbAt(base + i, total), s.textShadow);
 						x += font.width(ch);
 					}
 				}

@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.clientify.client.modules.TabModule;
 import dev.clientify.client.modules.TotemModule;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public abstract class PlayerTabOverlayMixin {
 	 * happens.
 	 */
 	@WrapMethod(method = "render")
-	private void clientify$tabList(GuiGraphics g, int width, Scoreboard scoreboard,
+	private void clientify$tabList(GuiGraphicsExtractor g, int width, Scoreboard scoreboard,
 			@Nullable Objective objective, Operation<Void> original) {
 		TabModule.Settings s = TabModule.active();
 		TabModule m = TabModule.get();
@@ -92,8 +92,8 @@ public abstract class PlayerTabOverlayMixin {
 
 	@WrapOperation(method = "render",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
-	private void clientify$hideHeads(GuiGraphics g, Identifier skin, int x, int y, int size,
+					target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
+	private void clientify$hideHeads(GuiGraphicsExtractor g, Identifier skin, int x, int y, int size,
 			boolean hat, boolean upsideDown, int tint, Operation<Void> original) {
 		TabModule.Settings s = TabModule.active();
 		if (s == null || !s.hideHeads) {
@@ -103,8 +103,8 @@ public abstract class PlayerTabOverlayMixin {
 
 	/** Recolors the tab list's own fills: panel background vs per-player row strips. */
 	@WrapOperation(method = "render",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
-	private void clientify$tabFills(GuiGraphics g, int x0, int y0, int x1, int y1, int color,
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"))
+	private void clientify$tabFills(GuiGraphicsExtractor g, int x0, int y0, int x1, int y1, int color,
 			Operation<Void> original) {
 		if (!TabModule.drawFill(g, x0, y0, x1, y1, color)) {
 			original.call(g, x0, y0, x1, y1, color);
@@ -112,7 +112,7 @@ public abstract class PlayerTabOverlayMixin {
 	}
 
 	@Inject(method = "renderPingIcon", at = @At("HEAD"), cancellable = true)
-	private void clientify$pingTweaks(GuiGraphics g, int cellWidth, int x, int y, PlayerInfo info,
+	private void clientify$pingTweaks(GuiGraphicsExtractor g, int cellWidth, int x, int y, PlayerInfo info,
 			CallbackInfo ci) {
 		TabModule.Settings s = TabModule.active();
 		if (s == null || s.ping == TabModule.PingMode.ICONS) {
@@ -126,7 +126,7 @@ public abstract class PlayerTabOverlayMixin {
 			g.pose().pushMatrix();
 			g.pose().translate(x + cellWidth - tw * 0.75f, y + 1);
 			g.pose().scale(0.75f, 0.75f);
-			g.drawString(mc.font, text, 0, 0, TabModule.pingColor(info.getLatency()), false);
+			g.text(mc.font, text, 0, 0, TabModule.pingColor(info.getLatency()), false);
 			g.pose().popMatrix();
 		}
 	}

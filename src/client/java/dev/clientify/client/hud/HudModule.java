@@ -4,7 +4,7 @@ import dev.clientify.client.config.ModuleSettings;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * A movable HUD element. Position = 9-point anchor + offset (see ModuleSettings); elements
@@ -152,7 +152,7 @@ public abstract class HudModule {
 	 * Chip background + border for modules that render in LOCAL space under a pose scale
 	 * (the vanilla-font text path). Draws at (0,0)..(w,h) local (unscaled radius/thickness).
 	 */
-	protected void drawChromeLocal(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, int w, int h) {
+	protected void drawChromeLocal(net.minecraft.client.gui.GuiGraphicsExtractor g, Minecraft mc, int w, int h) {
 		ModuleSettings s = settings();
 		int rad = s.bgRounded ? Math.max(0, s.bgRadius) : 0;
 		int t = s.border ? Math.max(1, s.borderThickness) : 0;
@@ -169,7 +169,7 @@ public abstract class HudModule {
 				rad == 0 ? 0 : (rad + t) * s.scale, () -> paintChromeLocal(g, mc, s, w, h, rad, t, r));
 	}
 
-	private void paintChromeLocal(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, ModuleSettings s,
+	private void paintChromeLocal(net.minecraft.client.gui.GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s,
 			int w, int h, int rad, int t, Rect r) {
 		if (s.background) {
 			if (s.bgBlur && BlurBackdrop.prepare(mc)) {
@@ -188,7 +188,7 @@ public abstract class HudModule {
 	 * Chip background + border in SCREEN space at (x,y,w,h) — radius/thickness scaled by the
 	 * module scale. For modules that lay out in screen coords (icon modules using HudText).
 	 */
-	protected void drawChromeScreen(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, int x, int y, int w, int h) {
+	protected void drawChromeScreen(net.minecraft.client.gui.GuiGraphicsExtractor g, Minecraft mc, int x, int y, int w, int h) {
 		drawChromeScreen(g, mc, x, y, w, h, settings().scale);
 	}
 
@@ -197,7 +197,7 @@ public abstract class HudModule {
 	 * under zoom, separated coords/armor pieces), so radius and border thickness scale with
 	 * the part rather than the module.
 	 */
-	protected void drawChromeScreen(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, int x, int y, int w, int h,
+	protected void drawChromeScreen(net.minecraft.client.gui.GuiGraphicsExtractor g, Minecraft mc, int x, int y, int w, int h,
 			float scale) {
 		ModuleSettings s = settings();
 		int rad = Math.round((s.bgRounded ? Math.max(0, s.bgRadius) : 0) * scale);
@@ -210,7 +210,7 @@ public abstract class HudModule {
 				() -> paintChromeScreen(g, mc, s, x, y, w, h, rad, t));
 	}
 
-	private void paintChromeScreen(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, ModuleSettings s,
+	private void paintChromeScreen(net.minecraft.client.gui.GuiGraphicsExtractor g, Minecraft mc, ModuleSettings s,
 			int x, int y, int w, int h, int rad, int t) {
 		if (s.background) {
 			if (s.bgBlur && BlurBackdrop.prepare(mc)) {
@@ -249,7 +249,7 @@ public abstract class HudModule {
 
 	public abstract float unscaledHeight(Minecraft mc);
 
-	public abstract void render(GuiGraphics graphics, DeltaTracker deltaTracker);
+	public abstract void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker);
 
 	public record Rect(float x, float y, float w, float h) {
 		public boolean contains(double px, double py) {

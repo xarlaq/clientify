@@ -2,7 +2,7 @@ package dev.clientify.client.gui;
 
 import dev.clientify.client.util.Colors;
 import dev.clientify.client.util.Draw;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Clientify's dark palette + small chrome helpers. Dark theme only; the theme colors
@@ -58,17 +58,17 @@ public final class Ui {
 	}
 
 	/** Body text: pixel-perfect glyph-atlas font (falls back to vanilla internally). */
-	public static void str(GuiGraphics g, String s, int x, int y, int color) {
+	public static void str(GuiGraphicsExtractor g, String s, int x, int y, int color) {
 		MenuFont.draw(g, s, x, y, color);
 	}
 
 	/** Body text with a subtle shadow (HUD chips over the world). */
-	public static void strShadow(GuiGraphics g, String s, float x, float y, int color) {
+	public static void strShadow(GuiGraphicsExtractor g, String s, float x, float y, int color) {
 		MenuFont.draw(g, s, x, y, color, MenuFont.Size.BODY, true);
 	}
 
 	/** Title text (larger ascent, same font). */
-	public static void title(GuiGraphics g, String s, int x, int y, int color) {
+	public static void title(GuiGraphicsExtractor g, String s, int x, int y, int color) {
 		MenuFont.draw(g, s, x, y, color, MenuFont.Size.TITLE, false);
 	}
 
@@ -83,7 +83,7 @@ public final class Ui {
 	}
 
 	/** Letterspaced uppercase micro text (Lunar-style labels: tabs, chips, buttons). */
-	public static void caps(GuiGraphics g, String s, int x, int y, int color, float tracking) {
+	public static void caps(GuiGraphicsExtractor g, String s, int x, int y, int color, float tracking) {
 		MenuFont.draw(g, s.toUpperCase(java.util.Locale.ROOT), x, y, color, MenuFont.Size.BODY, false, tracking);
 	}
 
@@ -92,7 +92,7 @@ public final class Ui {
 		return MenuFont.width(s.toUpperCase(java.util.Locale.ROOT), MenuFont.Size.BODY, tracking);
 	}
 
-	public static void card(GuiGraphics g, int x, int y, int w, int h, boolean hovered) {
+	public static void card(GuiGraphicsExtractor g, int x, int y, int w, int h, boolean hovered) {
 		if (hovered) {
 			Draw.smoothRoundedBordered(g, x, y, w, h, Draw.R_SMALL, cardHover(), accentSoft(), 1);
 		} else {
@@ -101,7 +101,7 @@ public final class Ui {
 	}
 
 	/** Small pill switch (Lunar-style toggle), drawn at its natural 22×11 size. */
-	public static void pill(GuiGraphics g, int x, int y, boolean on) {
+	public static void pill(GuiGraphicsExtractor g, int x, int y, boolean on) {
 		int w = 22;
 		int h = 11;
 		Draw.smoothRounded(g, x, y, w, h, h / 2, on ? accent() : TRACK);

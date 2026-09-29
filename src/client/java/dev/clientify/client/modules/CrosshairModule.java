@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
@@ -139,7 +139,7 @@ public class CrosshairModule extends HudModule {
 	}
 
 	/** Called by GuiCrosshairMixin in place of the vanilla crosshair sprite draw. */
-	public static void renderCurrent(GuiGraphics g) {
+	public static void renderCurrent(GuiGraphicsExtractor g) {
 		if (instance != null) {
 			instance.renderCrosshair(g);
 		}
@@ -356,7 +356,7 @@ public class CrosshairModule extends HudModule {
 		appliedPixels = key;
 	}
 
-	private void renderCrosshair(GuiGraphics g) {
+	private void renderCrosshair(GuiGraphicsExtractor g) {
 		Minecraft mc = Minecraft.getInstance();
 		Settings s = (Settings) settings();
 		int size = Math.max(1, Math.round(s.size));
@@ -390,6 +390,6 @@ public class CrosshairModule extends HudModule {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
+	public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
 	}
 }
