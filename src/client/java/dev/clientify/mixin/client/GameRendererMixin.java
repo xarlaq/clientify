@@ -35,13 +35,18 @@ public abstract class GameRendererMixin {
 	 * own matrix is pre-bob, and labels projected with it would slide against the world as you walk.
 	 * On 1.21.11 LevelRenderer.renderLevel received the finished matrix as an argument; this is the
 	 * same matrix at the same moment. There is exactly one Matrix4f and one CameraRenderState local.
+	 *
+	 * <p>26.2's LevelRenderer.render still takes the delta tracker and the view-rotation matrix,
+	 * which 26.3 dropped; the call is the same one, at the same point.
 	 */
 	@Inject(method = "renderLevel",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/renderer/LevelRenderer;render("
-							+ "Lcom/mojang/blaze3d/resource/GraphicsResourceAllocator;Z"
+							+ "Lcom/mojang/blaze3d/resource/GraphicsResourceAllocator;"
+							+ "Lnet/minecraft/client/DeltaTracker;Z"
 							+ "Lnet/minecraft/client/renderer/state/level/CameraRenderState;"
-							+ "Lcom/mojang/renderpearl/api/buffers/GpuBufferSlice;Lorg/joml/Vector4f;ZZ)V"))
+							+ "Lorg/joml/Matrix4fc;"
+							+ "Lcom/mojang/blaze3d/buffers/GpuBufferSlice;Lorg/joml/Vector4f;Z)V"))
 	private void clientify$captureFrame(CallbackInfo ci, @Local Matrix4f projectionMatrix,
 			@Local CameraRenderState cameraState) {
 		WaypointsModule.captureFrame(cameraState.pos, projectionMatrix, cameraState.viewRotationMatrix);

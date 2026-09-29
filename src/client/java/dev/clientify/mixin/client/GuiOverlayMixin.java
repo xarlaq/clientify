@@ -2,7 +2,7 @@ package dev.clientify.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import dev.clientify.client.modules.OverlayModule;
 import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -38,7 +38,7 @@ public abstract class GuiOverlayMixin {
 
 	@WrapOperation(method = "extractSpyglassOverlay",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;"
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;"
 							+ "Lnet/minecraft/resources/Identifier;IIFFIIII)V"))
 	private void clientify$fadeScope(GuiGraphicsExtractor guiGraphics, RenderPipeline pipeline, Identifier texture,
 			int x, int y, float u, float v, int w, int h, int texW, int texH, Operation<Void> original) {
@@ -54,7 +54,7 @@ public abstract class GuiOverlayMixin {
 
 	@ModifyArg(method = "extractSpyglassOverlay",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;IIIII)V"),
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"),
 			index = 5)
 	private int clientify$fadeScopeBars(int color) {
 		float opacity = OverlayModule.spyglassOpacity();

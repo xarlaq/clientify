@@ -2,7 +2,7 @@ package dev.clientify.client.gui;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.renderpearl.api.textures.FilterMode;
+import com.mojang.blaze3d.textures.FilterMode;
 import dev.clientify.client.ClientifyClient;
 import java.awt.Color;
 import java.awt.Font;

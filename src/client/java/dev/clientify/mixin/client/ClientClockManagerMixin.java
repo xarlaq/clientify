@@ -1,5 +1,6 @@
 package dev.clientify.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.clientify.client.modules.TimeModule;
 import net.minecraft.client.ClientClockManager;
 import net.minecraft.core.Holder;
@@ -7,24 +8,22 @@ import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.clock.WorldClocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Notes which clock instance is the overworld's day, for the time changer.
+ * The time changer's override of the overworld's day.
  *
  * <p>26.x replaced a level's day time with world clocks, and the sky reads its sun angle from a
- * timeline sampled against one of them - the overworld clock, per the 26.3 {@code day} timeline.
- * An instance does not know which clock it belongs to; the manager does, at the moment it hands one
- * out, so this is where the day clock gets recognised. See {@link ClientClockInstanceMixin}.
+ * timeline sampled against the overworld clock. On 26.2 every reader - the timeline sampler, the
+ * level's own day time, loot checks - asks the manager through getTotalTicks, and the instances are
+ * private data holders nothing else touches, so the return of that one method is the whole surface.
+ *
+ * <p>26.3 hands its instances out and lets callers read them directly, which is why that version
+ * tracks the day clock's instance instead. This is the simpler shape for the simpler API.
  */
 @Mixin(ClientClockManager.class)
 public abstract class ClientClockManagerMixin {
-	@Inject(method = "getInstance", at = @At("RETURN"))
-	private void clientify$noteDayClock(Holder<WorldClock> definition,
-			CallbackInfoReturnable<ClientClockManager.ClientClockInstance> cir) {
-		if (definition.is(WorldClocks.OVERWORLD)) {
-			TimeModule.dayClock(cir.getReturnValue());
-		}
+	@ModifyReturnValue(method = "getTotalTicks", at = @At("RETURN"))
+	private long clientify$overrideDayTime(long original, Holder<WorldClock> definition) {
+		return definition.is(WorldClocks.OVERWORLD) ? TimeModule.overrideDayTime(original) : original;
 	}
 }

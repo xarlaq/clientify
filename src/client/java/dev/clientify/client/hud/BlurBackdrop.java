@@ -4,8 +4,8 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.resource.CrossFrameResourcePool;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.renderpearl.api.textures.GpuTexture;
-import com.mojang.renderpearl.api.textures.GpuTextureView;
+import com.mojang.blaze3d.textures.GpuTexture;
+import com.mojang.blaze3d.textures.GpuTextureView;
 import dev.clientify.client.ClientifyClient;
 import dev.clientify.client.config.ClientifyConfig;
 import dev.clientify.client.config.GlobalSettings;
@@ -192,8 +192,8 @@ public final class BlurBackdrop {
 			if (target != null) {
 				target.destroyBuffers();
 			}
-			target = new TextureTarget("Clientify blur backdrop", width, height,
-					com.mojang.renderpearl.api.GpuFormat.RGBA8_UNORM, null);
+			target = new TextureTarget("Clientify blur backdrop", width, height, false,
+					com.mojang.blaze3d.GpuFormat.RGBA8_UNORM);
 			if (wrapper == null) {
 				wrapper = new WrapTexture();
 				mc.getTextureManager().register(TEXTURE_ID, wrapper);

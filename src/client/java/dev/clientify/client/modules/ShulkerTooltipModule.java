@@ -103,7 +103,7 @@ public class ShulkerTooltipModule extends HudModule {
 		// deferred slot and land on top.
 		g.tooltip(font, tooltipOf(mc, lockedStack), lockedX, lockedY,
 				DefaultTooltipPositioner.INSTANCE,
-				lockedStack.get(net.minecraft.core.component.DataComponents.TOOLTIP_STYLE), true);
+				lockedStack.get(net.minecraft.core.component.DataComponents.TOOLTIP_STYLE));
 		ItemStack inside = itemAt(mouseX, mouseY);
 		if (!inside.isEmpty()) {
 			g.setTooltipForNextFrame(font, inside, mouseX, mouseY);
