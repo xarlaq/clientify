@@ -3,7 +3,7 @@ package dev.clientify.client.util;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.clientify.client.gui.WaypointImportScreen;
 import dev.clientify.client.modules.WaypointsModule.Waypoint;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.ChatFormatting;
@@ -39,8 +39,8 @@ public final class WaypointShareHandler {
 		ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> overlay || allow(message));
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, access) ->
-				dispatcher.register(ClientCommandManager.literal(COMMAND)
-						.then(ClientCommandManager.argument("code", StringArgumentType.greedyString())
+				dispatcher.register(ClientCommands.literal(COMMAND)
+						.then(ClientCommands.argument("code", StringArgumentType.greedyString())
 								.executes(ctx -> {
 									open(StringArgumentType.getString(ctx, "code"));
 									return 1;
@@ -83,7 +83,7 @@ public final class WaypointShareHandler {
 				.withClickEvent(new ClickEvent.RunCommand("/" + COMMAND + " " + code))
 				.withHoverEvent(new HoverEvent.ShowText(Component.literal(
 						wp.name + "\n" + coords(wp) + "\nClick to add this waypoint"))));
-		mc.gui.getChat().addMessage(full);
+		mc.gui.getChat().addClientSystemMessage(full);
 		return false;
 	}
 
@@ -98,7 +98,7 @@ public final class WaypointShareHandler {
 		Waypoint wp = WaypointShare.decode(code);
 		mc.execute(() -> {
 			if (wp == null) {
-				mc.gui.getChat().addMessage(Component.literal("That is not a Clientify waypoint code.")
+				mc.gui.getChat().addClientSystemMessage(Component.literal("That is not a Clientify waypoint code.")
 						.withStyle(ChatFormatting.RED));
 				return;
 			}

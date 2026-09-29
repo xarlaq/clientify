@@ -3,8 +3,8 @@ package dev.clientify.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.clientify.client.modules.GuiScaleModule;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +28,7 @@ public class PictureInPictureRendererMixin {
 	// blitTexture is required to hit on vanilla but NOT on VulkanMod, which merges that method
 	// into its own and leaves nothing of ours to attach to. Required, it took the game down at
 	// startup; optional, the picture in picture sizing is simply left to VulkanMod there.
-	private static final String STATE = "Lnet/minecraft/client/gui/render/state/pip/PictureInPictureRenderState;";
+	private static final String STATE = "Lnet/minecraft/client/renderer/state/gui/pip/PictureInPictureRenderState;";
 
 	// Everything below runs inside prepare, blitTexture included, so one lookup covers the lot.
 	@Inject(method = "prepare", at = @At("HEAD"))

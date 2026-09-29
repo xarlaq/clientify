@@ -37,6 +37,20 @@ public class WeatherModule extends HudModule {
 	}
 
 	private boolean wasForcing;
+	/**
+	 * The server's own rain and thunder levels, kept while ours are forced so they can be put back.
+	 *
+	 * <p>26.x has no raining flag to consult afterwards: the client's rain level IS its idea of the
+	 * weather, and {@code Level.isRaining()} is only that level compared against 0.2. Forcing
+	 * overwrites the one place the truth lived, so it is recorded instead - any level that differs
+	 * from what we last wrote was written by the server, since nothing else touches it.
+	 */
+	private float serverRain;
+	private float serverThunder;
+	private float wroteRain = Float.NaN;
+	private float wroteThunder = Float.NaN;
+	/** The level those were read from. A new one starts from its own weather, not the last one's. */
+	private Object forcedLevel;
 	private static WeatherModule instance;
 
 	public WeatherModule() {
@@ -90,13 +104,27 @@ public class WeatherModule extends HudModule {
 	public void tick(Minecraft mc) {
 		boolean force = isEnabled() && mc.level != null && settings() != null;
 		if (force) {
+			// Whatever is there now and is not what we wrote came from the server.
+			float rain = mc.level.getRainLevel(1f);
+			float thunder = mc.level.getThunderLevel(1f);
+			// A different level has never been forced, so everything in it is the server's.
+			boolean fresh = !wasForcing || mc.level != forcedLevel;
+			forcedLevel = mc.level;
+			if (fresh || rain != wroteRain) {
+				serverRain = rain;
+			}
+			if (fresh || thunder != wroteThunder) {
+				serverThunder = thunder;
+			}
 			Weather w = ((Settings) settings()).weather;
-			mc.level.setRainLevel(w == Weather.CLEAR ? 0f : 1f);
-			mc.level.setThunderLevel(w == Weather.THUNDER ? 1f : 0f);
+			wroteRain = w == Weather.CLEAR ? 0f : 1f;
+			wroteThunder = w == Weather.THUNDER ? 1f : 0f;
+			mc.level.setRainLevel(wroteRain);
+			mc.level.setThunderLevel(wroteThunder);
 		} else if (wasForcing && mc.level != null) {
-			// Back to the server's truth (thunder level re-syncs on the next weather event).
-			mc.level.setRainLevel(mc.level.getLevelData().isRaining() ? 1f : 0f);
-			mc.level.setThunderLevel(0f);
+			// Back to exactly what the server last said, thunder included.
+			mc.level.setRainLevel(serverRain);
+			mc.level.setThunderLevel(serverThunder);
 		}
 		wasForcing = force;
 	}

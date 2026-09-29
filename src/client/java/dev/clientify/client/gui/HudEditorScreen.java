@@ -176,7 +176,7 @@ public class HudEditorScreen extends Screen {
 				g.fill(0, (int) snapGuideY, width, (int) snapGuideY + 1, guide);
 			}
 		}
-		minecraft.gui.renderDeferredSubtitles(); // vanilla ends renderBackground with this
+		minecraft.gui.extractDeferredSubtitles(); // vanilla ends renderBackground with this
 	}
 
 	@Override

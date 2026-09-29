@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Hides vanilla's top-right potion icons while the Effects HUD module replaces them. */
 @Mixin(Gui.class)
 public abstract class GuiEffectsMixin {
-	@Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractEffects", at = @At("HEAD"), cancellable = true)
 	private void clientify$hideVanillaEffects(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		if (EffectsHudModule.hideVanillaActive()) {
 			ci.cancel();

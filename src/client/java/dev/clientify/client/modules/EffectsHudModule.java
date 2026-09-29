@@ -412,7 +412,7 @@ public class EffectsHudModule extends HudModule {
 		}
 		int iconPx = Math.round(ICON * scale);
 		float in = cellInset(s) * scale;
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, Gui.getMobEffectSprite(e.getEffect()),
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, net.minecraft.client.gui.Gui.getMobEffectSprite(e.getEffect()),
 				Math.round(iconX + in), Math.round(iconY + in), iconPx, iconPx, tint);
 
 		float ty = textTop;

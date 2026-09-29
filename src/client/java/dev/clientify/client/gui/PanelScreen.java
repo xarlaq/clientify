@@ -253,7 +253,7 @@ public abstract class PanelScreen extends Screen {
 			Ui.caps(g, "Edit HUD Layout", (int) (erc.x() + (erc.w() - Ui.capsW("Edit HUD Layout", 0.2f)) / 2),
 					(int) erc.y() + 4, 0xFFFFFFFF, 0.2f);
 			renderMain(g, mouseX, mouseY, partialTick);
-			minecraft.gui.renderDeferredSubtitles();
+			minecraft.gui.extractDeferredSubtitles();
 			return;
 		}
 
@@ -326,7 +326,7 @@ public abstract class PanelScreen extends Screen {
 				(int) er.y() + 4, 0xFFFFFFFF, 0.2f);
 
 		renderMain(g, mouseX, mouseY, partialTick);
-		minecraft.gui.renderDeferredSubtitles(); // vanilla ends renderBackground with this
+		minecraft.gui.extractDeferredSubtitles(); // vanilla ends renderBackground with this
 	}
 
 	// ---- sidebar takeover (a screen swaps the profile list for its own) ----

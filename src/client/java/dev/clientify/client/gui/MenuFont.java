@@ -164,7 +164,7 @@ public final class MenuFont {
 			int cx = (i % COLS) * cellW;
 			int cy = (i / COLS) * fullH;
 			int w = Math.max(1, fm.charWidth(c));
-			g.text(String.valueOf(c), cx + PAD, cy + PAD + ascent);
+			g.drawString(String.valueOf(c), cx + PAD, cy + PAD + ascent);
 			set.glyphs.put(c, new Glyph(cx + PAD, cy + PAD, w, cellH, w));
 		}
 		g.dispose();

@@ -16,13 +16,13 @@ import org.spongepowered.asm.mixin.injection.At;
  */
 @Mixin(Gui.class)
 public abstract class GuiAttackIndicatorMixin {
-	@ModifyExpressionValue(method = "renderCrosshair",
+	@ModifyExpressionValue(method = "extractCrosshair",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
 	private Object clientify$crosshairIndicator(Object vanilla) {
 		return AttackIndicatorModule.vanillaStatus(vanilla);
 	}
 
-	@ModifyExpressionValue(method = "renderItemHotbar",
+	@ModifyExpressionValue(method = "extractItemHotbar",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
 	private Object clientify$hotbarIndicator(Object vanilla) {
 		return AttackIndicatorModule.vanillaStatus(vanilla);

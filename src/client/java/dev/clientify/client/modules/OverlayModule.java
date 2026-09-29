@@ -165,13 +165,12 @@ public class OverlayModule extends HudModule {
 	public OverlayModule() {
 		super("overlay", "Overlay");
 		instance = this;
-		// Plain glass is built into the chunk on the CUTOUT layer, where alpha is a yes or no
-		// question answered at a half -- which is why a faded pane looked right in the hand and
-		// was either solid or gone in the world. On the translucent layer the fade is drawn as
-		// asked. Dyed and tinted glass are already there; these two are the exceptions.
-		net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlocks(
-				net.minecraft.client.renderer.chunk.ChunkSectionLayer.TRANSLUCENT,
-				Blocks.GLASS, Blocks.GLASS_PANE);
+		// Faded glass needs the TRANSLUCENT chunk layer: on CUTOUT, alpha is a yes-or-no question
+		// answered at a half, so a faded pane looked right in the hand and was solid or gone in the
+		// world. On 1.21.11 plain glass had to be moved there by hand. 26.x picks a quad's layer
+		// from its texture instead, and vanilla's own glass and glass-pane models already mark
+		// their textures force_translucent - so there is nothing left to do here. A resource pack
+		// that replaces those models without the flag puts glass back on cutout, which is its call.
 		// Animated textures are painted as they load, which needs asking rather than telling:
 		// they load long before a tick has said what is wanted.
 		BlockTextures.provider(OverlayModule::wantedTextures);

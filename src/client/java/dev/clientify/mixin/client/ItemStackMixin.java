@@ -26,7 +26,7 @@ public abstract class ItemStackMixin {
 			return;
 		}
 		ItemContainerContents contents = self.get(DataComponents.CONTAINER);
-		if (contents != null && contents.nonEmptyStream().findAny().isPresent()) {
+		if (contents != null && contents.nonEmptyItems().iterator().hasNext()) {
 			DyeColor color = box.getColor();
 			int tint = color != null ? color.getTextureDiffuseColor() : 0;
 			cir.setReturnValue(Optional.of(new ShulkerTooltipModule.ShulkerGridTooltip(contents, tint)));

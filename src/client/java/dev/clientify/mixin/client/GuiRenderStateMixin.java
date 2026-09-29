@@ -3,8 +3,8 @@ package dev.clientify.mixin.client;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.clientify.client.modules.GuiScaleModule;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(GuiRenderState.class)
 public class GuiRenderStateMixin {
-	@Inject(method = "submitPicturesInPictureState", at = @At("HEAD"))
+	@Inject(method = "addPicturesInPictureState", at = @At("HEAD"))
 	private void clientify$tagPicture(PictureInPictureRenderState state, CallbackInfo ci) {
 		GuiScaleModule.tagPictureInPicture(state);
 	}
@@ -27,7 +27,7 @@ public class GuiRenderStateMixin {
 	// submitted with rather than the ones it will be drawn at. Every other element passes through.
 	@ModifyExpressionValue(method = "findAppropriateNode",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/render/state/ScreenArea;bounds()"
+					target = "Lnet/minecraft/client/renderer/state/gui/ScreenArea;bounds()"
 							+ "Lnet/minecraft/client/gui/navigation/ScreenRectangle;"))
 	private ScreenRectangle clientify$pictureBounds(ScreenRectangle original) {
 		return GuiScaleModule.scalePictureBounds(original);

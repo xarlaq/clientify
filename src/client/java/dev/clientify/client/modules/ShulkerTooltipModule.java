@@ -11,7 +11,7 @@ import dev.clientify.client.util.HoldableKey;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -50,7 +50,7 @@ public class ShulkerTooltipModule extends HudModule {
 		lockKey = new HoldableKey("key.clientify.lock_tooltip", InputConstants.KEY_LCONTROL,
 				ClientifyClient.KEY_CATEGORY);
 		KeyMappingHelper.registerKeyMapping(lockKey); // returns the base type, so keep our own reference
-		TooltipComponentCallback.EVENT.register(data ->
+		ClientTooltipComponentCallback.EVENT.register(data ->
 				data instanceof ShulkerGridTooltip grid ? new ClientShulkerGridTooltip(grid) : null);
 	}
 
@@ -101,7 +101,7 @@ public class ShulkerTooltipModule extends HudModule {
 		gridDrawn = false;
 		// Drawn now rather than deferred, so the item the pointer finds inside it can claim the
 		// deferred slot and land on top.
-		g.renderTooltip(font, tooltipOf(mc, lockedStack), lockedX, lockedY,
+		g.tooltip(font, tooltipOf(mc, lockedStack), lockedX, lockedY,
 				DefaultTooltipPositioner.INSTANCE,
 				lockedStack.get(net.minecraft.core.component.DataComponents.TOOLTIP_STYLE));
 		ItemStack inside = itemAt(mouseX, mouseY);
@@ -223,7 +223,7 @@ public class ShulkerTooltipModule extends HudModule {
 		private final int tint;
 
 		ClientShulkerGridTooltip(ShulkerGridTooltip grid) {
-			for (ItemStack stack : grid.contents().nonEmptyItemsCopy()) {
+			for (ItemStack stack : grid.contents().nonEmptyItemCopyStream().toList()) {
 				items.add(stack);
 			}
 			this.tint = grid.tint() == 0 ? 0xFF9A72C6 : grid.tint(); // default: shulker purple
@@ -252,7 +252,7 @@ public class ShulkerTooltipModule extends HudModule {
 		}
 
 		@Override
-		public void renderImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor g) {
+		public void extractImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor g) {
 			Settings s = activeSettings();
 			int w = cols() * CELL + PAD * 2;
 			int h = rows() * CELL + PAD * 2;

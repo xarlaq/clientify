@@ -26,7 +26,7 @@ public abstract class GuiActionBarMixin {
 	@Shadow
 	private boolean animateOverlayMessageColor;
 
-	@Inject(method = "renderOverlayMessage", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractOverlayMessage", at = @At("HEAD"), cancellable = true)
 	private void clientify$actionBarTweaks(GuiGraphicsExtractor g, DeltaTracker deltaTracker, CallbackInfo ci) {
 		ActionBarModule.Settings s = ActionBarModule.active();
 		if (s == null) {

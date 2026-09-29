@@ -23,9 +23,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
  */
 @Mixin(Gui.class)
 public abstract class GuiOverlayMixin {
-	@WrapOperation(method = "renderCameraOverlays",
+	@WrapOperation(method = "extractCameraOverlays",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/Gui;renderTextureOverlay("
+					target = "Lnet/minecraft/client/gui/Gui;extractTextureOverlay("
 							+ "Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/resources/Identifier;F)V"))
 	private void clientify$fadeOverlay(Gui gui, GuiGraphicsExtractor guiGraphics, Identifier texture, float alpha,
 			Operation<Void> original) {
@@ -36,7 +36,7 @@ public abstract class GuiOverlayMixin {
 		original.call(gui, guiGraphics, texture, alpha * opacity);
 	}
 
-	@WrapOperation(method = "renderSpyglassOverlay",
+	@WrapOperation(method = "extractSpyglassOverlay",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;"
 							+ "Lnet/minecraft/resources/Identifier;IIFFIIII)V"))
@@ -52,7 +52,7 @@ public abstract class GuiOverlayMixin {
 		}
 	}
 
-	@ModifyArg(method = "renderSpyglassOverlay",
+	@ModifyArg(method = "extractSpyglassOverlay",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"),
 			index = 5)

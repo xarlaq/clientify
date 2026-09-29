@@ -137,9 +137,10 @@ public class TotemModule extends HudModule {
 	 */
 	private static float halfFovTan(Minecraft mc) {
 		float fov = 70f;
-		if (mc.gameRenderer instanceof dev.clientify.mixin.client.GameRendererFovAccessor access) {
-			float partial = mc.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-			fov = access.clientify$getFov(mc.gameRenderer.getMainCamera(), partial, false);
+		// 26.x: the camera works this out once a frame as hudFov - the HUD projection's own field of
+		// view, from the same seventy with the same death and fluid adjustments.
+		if (mc.gameRenderer.getMainCamera() instanceof dev.clientify.mixin.client.CameraHudFovAccessor access) {
+			fov = access.clientify$hudFov();
 		}
 		return (float) Math.tan(Math.toRadians(fov) / 2d);
 	}
@@ -152,9 +153,9 @@ public class TotemModule extends HudModule {
 	public TotemModule() {
 		super("totem", "Totem Tweaks");
 		instance = this;
-		resetKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyBinding(
+		resetKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(
 				new net.minecraft.client.KeyMapping("key.clientify.totem_reset",
-						org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN,
+						com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(),
 						dev.clientify.client.ClientifyClient.KEY_CATEGORY));
 	}
 
@@ -495,7 +496,7 @@ public class TotemModule extends HudModule {
 				g.pose().pushMatrix();
 				g.pose().translate(x, y);
 				g.pose().scale(COUNTER_ICON / 16f * scale, COUNTER_ICON / 16f * scale);
-				g.item(TOTEM, 0, 0);
+				g.item(totem(), 0, 0);
 				g.pose().popMatrix();
 				x += (COUNTER_ICON + COUNTER_GAP) * scale;
 			}
@@ -519,10 +520,23 @@ public class TotemModule extends HudModule {
 
 	// ---- the editor box ----
 
-	/** Below this the box is more of a dot than a handle, and there is no scrolling back up. */
 	/** Shared: renderItem only reads it, and one per line per frame was one too many. */
-	private static final ItemStack TOTEM = new ItemStack(Items.TOTEM_OF_UNDYING);
+	private static ItemStack totem;
 
+	/**
+	 * Made on first draw rather than with the class. 26.x binds item components after mods
+	 * initialise, and an ItemStack made before that throws - which, from a static field, took the
+	 * whole client down at startup. Only ever touched from the render thread.
+	 */
+	private static ItemStack totem() {
+		ItemStack stack = totem;
+		if (stack == null) {
+			totem = stack = new ItemStack(Items.TOTEM_OF_UNDYING);
+		}
+		return stack;
+	}
+
+	/** Below this the box is more of a dot than a handle, and there is no scrolling back up. */
 	private static final float SMALLEST_BOX = 24f;
 
 	/**
@@ -617,7 +631,7 @@ public class TotemModule extends HudModule {
 		graphics.pose().pushMatrix();
 		graphics.pose().translate(r.x() + r.w() / 2f, r.y() + r.h() / 2f);
 		graphics.pose().scale(r.w() / 16f, r.h() / 16f);
-		graphics.item(TOTEM, -8, -8);
+		graphics.item(totem(), -8, -8);
 		graphics.pose().popMatrix();
 	}
 

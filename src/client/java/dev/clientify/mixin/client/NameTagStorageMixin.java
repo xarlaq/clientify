@@ -5,11 +5,11 @@ import dev.clientify.client.modules.NametagsModule;
 import dev.clientify.client.modules.TotemModule;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -24,6 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Nametag tweaks. Vanilla's submission is replaced wholesale while the module is on (a
  * faithful copy of {@code Storage.add} with our scale, plate color and see-through rules)
  * — a takeover rather than local-variable surgery, which is stable across remaps.
+ *
+ * <p>26.1 keeps 1.21.11's Storage.add; its body differs only in taking the emissive light from
+ * LightCoordsUtil and the plate opacity from the game render state's options, both followed here.
  */
 @Mixin(NameTagFeatureRenderer.Storage.class)
 public abstract class NameTagStorageMixin {
@@ -59,14 +62,15 @@ public abstract class NameTagStorageMixin {
 		poseStack.scale(scale, -scale, scale);
 		Matrix4f pose = new Matrix4f(poseStack.last().pose());
 		float x = -mc.font.width(text) / 2.0F;
-		int vanillaPlate = (int) (mc.options.getBackgroundOpacity(0.25F) * 255.0F) << 24;
+		int vanillaPlate = (int) (mc.gameRenderer.getGameRenderState().optionsRenderState
+				.getBackgroundOpacity(0.25F) * 255.0F) << 24;
 		int plate = NametagsModule.backgroundArgb(vanillaPlate);
 
 		int textColor = NametagsModule.textColor(TEXT_COLOR);
 		// notDiscrete = vanilla's "also draw a see-through pass" — kept exactly as vanilla.
 		if (notDiscrete) {
 			clientify$tag(nameTagSubmitsNormal, pose, x, y, text,
-					LightTexture.lightCoordsWithEmission(light, 2), NametagsModule.textColor(-1), 0,
+					LightCoordsUtil.lightCoordsWithEmission(light, 2), NametagsModule.textColor(-1), 0,
 					distanceSq);
 			clientify$tag(nameTagSubmitsSeethrough, pose, x, y, text, light, textColor, plate, distanceSq);
 		} else {

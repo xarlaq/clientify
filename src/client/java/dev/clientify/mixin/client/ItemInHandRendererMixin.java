@@ -23,6 +23,10 @@ import org.spongepowered.asm.mixin.injection.At;
  *
  * <p>Pushed and popped around vanilla's own draw rather than translating in place, so the shift
  * cannot leak into whatever is rendered next.
+ *
+ * <p>26.2 keeps 1.21.11's ItemInHandRenderer, its parameters and its two renderItem calls; only
+ * renderArmWithItem became submitArmWithItem. 26.3 is where it turns into
+ * FirstPersonHandsAndItemsRenderer.
  */
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererMixin {

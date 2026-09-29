@@ -32,7 +32,7 @@ public abstract class GuiTitleMixin {
 	@Shadow
 	private int titleFadeOutTime;
 
-	@Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "extractTitle", at = @At("HEAD"), cancellable = true)
 	private void clientify$titleTweaks(GuiGraphicsExtractor g, DeltaTracker deltaTracker, CallbackInfo ci) {
 		TitleModule.Settings s = TitleModule.active();
 		if (s == null) {

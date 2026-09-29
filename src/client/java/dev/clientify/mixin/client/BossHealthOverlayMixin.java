@@ -33,7 +33,7 @@ public abstract class BossHealthOverlayMixin {
 	 * bars left the matrix pushed with the flag still set — and the next frame pushed another on
 	 * top of it, once per frame, without end. The finally cannot be skipped.
 	 */
-	@WrapMethod(method = "render")
+	@WrapMethod(method = "extractRenderState")
 	private void clientify$bossBars(GuiGraphicsExtractor g, Operation<Void> original) {
 		clientify$barIndex = 0;
 		BossBarModule.Settings s = BossBarModule.active();
@@ -64,9 +64,9 @@ public abstract class BossHealthOverlayMixin {
 		}
 	}
 
-	@WrapOperation(method = "render",
+	@WrapOperation(method = "extractRenderState",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;drawBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;)V"))
+					target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;extractBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;)V"))
 	private void clientify$limitBars(BossHealthOverlay self, GuiGraphicsExtractor g, int x, int y, BossEvent event,
 			Operation<Void> original) {
 		if (!BossBarModule.overLimit(clientify$barIndex) && !BossBarModule.hideBar()) {
@@ -76,7 +76,7 @@ public abstract class BossHealthOverlayMixin {
 	}
 
 	/** Recolors the bar sprites by swapping in the tinted blitSprite overload. */
-	@WrapOperation(method = "drawBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;I[Lnet/minecraft/resources/Identifier;[Lnet/minecraft/resources/Identifier;)V",
+	@WrapOperation(method = "extractBar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IILnet/minecraft/world/BossEvent;I[Lnet/minecraft/resources/Identifier;[Lnet/minecraft/resources/Identifier;)V",
 			at = @At(value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIII)V"))
 	private void clientify$barColor(GuiGraphicsExtractor g, com.mojang.blaze3d.pipeline.RenderPipeline pipeline,
@@ -90,9 +90,9 @@ public abstract class BossHealthOverlayMixin {
 		}
 	}
 
-	@WrapOperation(method = "render",
+	@WrapOperation(method = "extractRenderState",
 			at = @At(value = "INVOKE",
-					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
+					target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
 	private void clientify$barName(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int color,
 			Operation<Void> original) {
 		if (BossBarModule.hideText() || BossBarModule.overLimit(clientify$barIndex - 1)) {
