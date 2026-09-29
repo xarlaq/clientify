@@ -13,9 +13,10 @@ import org.spongepowered.asm.mixin.injection.At;
  * The time changer's override of the overworld's day.
  *
  * <p>26.x replaced a level's day time with world clocks, and the sky reads its sun angle from a
- * timeline sampled against the overworld clock. On 26.2 every reader - the timeline sampler, the
- * level's own day time, loot checks - asks the manager through getTotalTicks, and the instances are
- * private data holders nothing else touches, so the return of that one method is the whole surface.
+ * timeline sampled against the overworld clock. On 26.1 and 26.2 every reader - the timeline
+ * sampler, the level's own day time, loot checks - asks the manager through getTotalTicks, and the
+ * instances are private data holders nothing else touches, so the return of that one method is the
+ * whole surface.
  *
  * <p>26.3 hands its instances out and lets callers read them directly, which is why that version
  * tracks the day clock's instance instead. This is the simpler shape for the simpler API.
