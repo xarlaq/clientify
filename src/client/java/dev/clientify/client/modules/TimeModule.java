@@ -94,7 +94,6 @@ public class TimeModule extends HudModule {
 		}
 	}
 
-	/** Called by ClientLevelDataMixin; keeps the server's day counter, swaps the time of day. */
 	/**
 	 * The overworld day clock's client instance, as the clock manager last handed it out.
 	 *
@@ -112,6 +111,10 @@ public class TimeModule extends HudModule {
 		return instance == dayClock;
 	}
 
+	/**
+	 * Called by ClientClockInstanceMixin with the day clock's total ticks; keeps the day counter,
+	 * swaps the time of day.
+	 */
 	public static long overrideDayTime(long original) {
 		TimeModule m = instance;
 		if (m == null || !m.isEnabled() || m.settings() == null) {
