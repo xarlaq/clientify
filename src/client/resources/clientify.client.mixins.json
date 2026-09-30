@@ -38,6 +38,7 @@
 		"LevelRendererMixin",
 		"LightTextureMixin",
 		"MouseHandlerMixin",
+		"NameTagFeatureRendererMixin",
 		"NameTagStorageMixin",
 		"OptionsMixin",
 		"OverlayTextureMixin",
