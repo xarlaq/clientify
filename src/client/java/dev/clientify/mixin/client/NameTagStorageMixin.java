@@ -81,12 +81,25 @@ public abstract class NameTagStorageMixin {
 	}
 
 	/**
-	 * Submits one nametag line. The text shadow, when the module wants one, is the font's own -
-	 * see NameTagFeatureRendererMixin - so nothing extra is submitted for it here.
+	 * Submits one nametag line, with a drop shadow under it when the module asks for one.
+	 *
+	 * <p>NameTagSubmit has no shadow of its own — vanilla nametags do not have one — so it is a
+	 * second submission of the same text, a pixel across and down, at vanilla's own shadow colour
+	 * (a quarter brightness, same alpha) and carrying no plate of its own.
+	 *
+	 * <p>The shadow goes in first so it lands behind. That is only strictly right when there is no
+	 * plate, because a plate belonging to the line above would be drawn over it — but a dark shadow
+	 * under a dark translucent plate is invisible either way, and the setting exists for the case
+	 * where the plate is off.
 	 */
 	@Unique
 	private void clientify$tag(List<SubmitNodeStorage.NameTagSubmit> into, Matrix4f pose, float x,
 			float y, Component text, int light, int color, int plate, double distanceSq) {
+		if (NametagsModule.textShadow()) {
+			int shadow = ((color & 0xFCFCFC) >> 2) | (color & 0xFF000000);
+			into.add(new SubmitNodeStorage.NameTagSubmit(pose, x + 1f, y + 1f, text, light, shadow, 0,
+					distanceSq));
+		}
 		into.add(new SubmitNodeStorage.NameTagSubmit(pose, x, y, text, light, color, plate, distanceSq));
 	}
 }
