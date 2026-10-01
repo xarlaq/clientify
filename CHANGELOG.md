@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.1
+
+Two fixes, and builds for newer Minecraft versions.
+
+### New Minecraft versions
+
+Clientify now also runs on Minecraft 26.1 (one jar for 26.1, 26.1.1 and 26.1.2), 26.2 and 26.3.
+Each version has its own jar, named after the game version; 1.21.11 carries on as before.
+Everything from 1.0.0 is in all of them.
+
+### Fixes
+
+- **Nametag text shadow.** With the shadow on, names the server colours (team or rank colours)
+  came out smeared: the shadow was a second copy of the name, and it took the name's own colour.
+  The game's font now draws the shadow, darkening each colour and keeping it behind the text.
+- **Binding mouse buttons in Clientify's menus.** The key rows (Zoom Key, Lock Key, the waypoint
+  keys and the rest) ignored mouse buttons, so a side button could only be bound from Minecraft's
+  Controls screen. Any mouse button works there now too, the same as in Controls.
+
 ## 1.0.0
 
 First public release. Minecraft 1.21.11, Fabric, client-side only.
