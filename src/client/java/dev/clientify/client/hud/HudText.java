@@ -147,15 +147,43 @@ public final class HudText {
 		return new Styled(sb.toString(), out);
 	}
 
-	/** Width of a Component in this module's font (screen space). */
+	/** Width of a Component in this module's font (screen space), as {@link #drawComponent} draws it. */
 	public static float width(Minecraft mc, ModuleSettings s, net.minecraft.network.chat.Component text) {
-		return width(mc, s, styled(text, 0xFFFFFFFF).text(), s.scale);
+		return width(mc, s, text, s.scale, null);
 	}
 
-	/** Width of a Component at an explicit scale. */
+	/** Width of a Component at an explicit scale, as {@link #drawComponent} draws it. */
 	public static float width(Minecraft mc, ModuleSettings s, net.minecraft.network.chat.Component text,
 			float scale) {
-		return width(mc, s, styled(text, 0xFFFFFFFF).text(), scale);
+		return width(mc, s, text, scale, null);
+	}
+
+	/**
+	 * Width of a Component as {@link #drawComponent} will draw it with this colour override.
+	 *
+	 * <p>In the Minecraft font the Component goes to vanilla whole - bold, italics and server fonts
+	 * included - so it has to be measured whole too. Measuring its plain string instead put a bold
+	 * title or subtitle off centre by the bold letters' extra width: 50px at GUI scale 2 for a
+	 * 26-letter subtitle. A per-character override draws the plain string, and is measured as one.
+	 */
+	public static float width(Minecraft mc, ModuleSettings s, net.minecraft.network.chat.Component text,
+			float scale, java.util.function.IntUnaryOperator override) {
+		Styled st = styled(text, 0xFFFFFFFF);
+		if (drawsWhole(s, override, st.colors().length)) {
+			return mc.font.width(text) * scale;
+		}
+		return width(mc, s, st.text(), scale);
+	}
+
+	/**
+	 * True when {@link #drawComponent} hands the Component to vanilla whole; false when it has to
+	 * draw it a character at a time. One rule for both, so the measure and the drawing agree.
+	 */
+	private static boolean drawsWhole(ModuleSettings s, java.util.function.IntUnaryOperator override,
+			int length) {
+		boolean varyingOverride = override != null && length > 1
+				&& override.applyAsInt(0) != override.applyAsInt(length - 1);
+		return s.font == ModuleSettings.FontMode.MINECRAFT && !varyingOverride;
 	}
 
 	/**
@@ -175,11 +203,7 @@ public final class HudText {
 		Styled st = styled(text, defaultColor);
 		int[] colors = st.colors();
 		// A per-character override (gradient/wave) is the only case that needs manual drawing.
-		boolean varyingOverride = false;
-		if (override != null && colors.length > 1) {
-			varyingOverride = override.applyAsInt(0) != override.applyAsInt(colors.length - 1);
-		}
-		if (s.font == ModuleSettings.FontMode.MINECRAFT && !varyingOverride) {
+		if (drawsWhole(s, override, colors.length)) {
 			// Vanilla renders the Component's own color spans AND the drop shadow itself.
 			g.pose().pushMatrix();
 			g.pose().translate(x, y);
