@@ -104,11 +104,6 @@ public class TitleModule extends HudModule {
 		return ((Settings) settings()).editorPreview ? super.draggables(mc, screenW, screenH) : List.of();
 	}
 
-	/** Text width at an extra font multiplier, in screen pixels. */
-	private float widthAt(Minecraft mc, ModuleSettings s, String text, float extra) {
-		return HudText.width(mc, s, text, s.scale * extra);
-	}
-
 	private float lineHeightAt(Minecraft mc, ModuleSettings s, float extra) {
 		return HudText.lineHeight(mc, s, s.scale * extra);
 	}
@@ -140,11 +135,13 @@ public class TitleModule extends HudModule {
 		Component t = boundsTitle(mc);
 		Component sub = boundsSubtitle(mc);
 		float w = 0;
+		// Measured as drawn, so a bold title widens the box - and its background - with it.
+		Settings ts = (Settings) s;
 		if (t != null) {
-			w = Math.max(w, widthAt(mc, s, t.getString(), TITLE_SCALE) / s.scale);
+			w = Math.max(w, HudText.width(mc, s, t, s.scale * TITLE_SCALE, colors(ts.titleColor, t, 255)) / s.scale);
 		}
 		if (sub != null) {
-			w = Math.max(w, widthAt(mc, s, sub.getString(), SUB_SCALE) / s.scale);
+			w = Math.max(w, HudText.width(mc, s, sub, s.scale * SUB_SCALE, colors(ts.subtitleColor, sub, 255)) / s.scale);
 		}
 		if (w <= 0) {
 			w = 20;
@@ -193,11 +190,18 @@ public class TitleModule extends HudModule {
 	private void drawLine(GuiGraphics g, Minecraft mc, Settings s, Component text, Rect r, float y,
 			float extra, ColorSpec spec, int alpha) {
 		float scale = s.scale * extra;
-		float w = HudText.width(mc, s, text, scale);
-		int len = text.getString().length();
+		java.util.function.IntUnaryOperator override = colors(spec, text, alpha);
+		// Measured with the same override it is drawn with: whether vanilla draws it whole (bold
+		// and all) or it is drawn a letter at a time depends on that, and so does its width.
+		float w = HudText.width(mc, s, text, scale, override);
 		int base = (alpha << 24) | 0xFFFFFF;
-		HudText.drawComponent(g, mc, s, text, r.x() + (r.w() - w) / 2f, y, base,
-				i -> (alpha << 24) | (spec.argbAt(i, len) & 0xFFFFFF), scale);
+		HudText.drawComponent(g, mc, s, text, r.x() + (r.w() - w) / 2f, y, base, override, scale);
+	}
+
+	/** The line's colour, letter by letter, at this alpha. */
+	private static java.util.function.IntUnaryOperator colors(ColorSpec spec, Component text, int alpha) {
+		int len = text.getString().length();
+		return i -> (alpha << 24) | (spec.argbAt(i, len) & 0xFFFFFF);
 	}
 
 	@Override
