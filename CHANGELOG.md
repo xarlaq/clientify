@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2
+
+### Fixes
+
+- **Off-centre titles.** With the Title or Action Bar module on, bold text was measured as if it
+  were plain, so it was drawn off centre (a bold subtitle by about 50 pixels). Titles, subtitles
+  and action-bar messages are now measured the way they are drawn and sit centred.
+
 ## 1.0.1
 
 Two fixes, and builds for newer Minecraft versions.
